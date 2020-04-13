@@ -53,16 +53,16 @@ public class ClientRegistrationThread implements Runnable{
 					
 					for(String i : data)
 					{
-						System.out.println(i);
+						//System.out.println(i);
 						String str = new String();
 						String[] contents = i.split(",");
 						str = contents[0]+ contents[1] + ": ";
-						
+						System.out.println(str);
 						if (contents.length%2==0)
 						{
-							for (int k=2; k< contents.length ;k=k+2)
+							for (int k=2; k< contents.length; k++)
 							{
-								str = "[Section: "+ contents[k]+ " (0/" + contents[k++]+")] ";
+								str += "[Section: "+ contents[k]+ " (0/" + contents[++k]+")] ";
 							}
 						}
 						else System.err.println("Wrong size of message****");
