@@ -36,12 +36,12 @@ public class ClientRegistrationThread implements Runnable{
 	@Override
 	public void run() 
 	{
-		while(running)
-		{
+	
 			//if(SHOW ALL COURSES BUTTON PUSHED)
 
 			mf.getViewCC().addActionListener( (ActionEvent e) -> 
 			{
+				mf.getRecords().setText(null);
 				Message catalogRequest = new CatalogRequestMessage();
 				try 
 				{
@@ -49,7 +49,29 @@ public class ClientRegistrationThread implements Runnable{
 					this.toServer.flush();
 					CatalogDataMessage catalogData = (CatalogDataMessage)this.fromServer.readObject();
 					ArrayList<String> data = catalogData.getCatalog();
-					System.out.println(data);
+					//System.out.println(data);
+					
+					for(String i : data)
+					{
+						System.out.println(i);
+						String str = new String();
+						String[] contents = i.split(",");
+						str = contents[0]+ contents[1] + ": ";
+						
+						if (contents.length%2==0)
+						{
+							for (int k=2; k< contents.length ;k=k+2)
+							{
+								str = "[Section: "+ contents[k]+ " (0/" + contents[k++]+")] ";
+							}
+						}
+						else System.err.println("Wrong size of message****");
+						
+						str += "\n";
+						mf.getRecords().append(str);
+
+					}
+					
 					
 				} 
 				catch (IOException f) 
@@ -65,10 +87,6 @@ public class ClientRegistrationThread implements Runnable{
 				
 			}	);
 			
-			
-			
-
-		}
 		
 	}
 

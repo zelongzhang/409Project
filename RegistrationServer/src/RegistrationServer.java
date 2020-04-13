@@ -24,6 +24,7 @@ public class RegistrationServer
 		catch (IOException e) 
 		{
 			e.printStackTrace();
+			return;
 		}
 	}
 	protected void start()

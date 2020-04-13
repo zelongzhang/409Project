@@ -52,10 +52,12 @@ public class RegistrationThread implements Runnable
 			catch (ClassNotFoundException e) 
 			{
 				e.printStackTrace();
+				return;
 			} 
 			catch (IOException e) 
 			{
 				e.printStackTrace();
+				return;
 			}
 		}
 	}

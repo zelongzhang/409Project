@@ -98,6 +98,16 @@ public class MainFrame extends JFrame{
 	public void setViewCC(JButton viewCC) {
 		ViewCC = viewCC;
 	}
+
+
+	public JTextArea getRecords() {
+		return records;
+	}
+
+
+	public void setRecords(JTextArea records) {
+		this.records = records;
+	}
 	
 
 
