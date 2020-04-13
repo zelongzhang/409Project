@@ -58,18 +58,8 @@ public class MainFrame extends JFrame{
 		this.add("Center", CenterPanel);
 		
 		
-		
-		ViewCC.addActionListener( (ActionEvent e) -> {	
-			
-			ViewCourseCatalogue VCC = new ViewCourseCatalogue(records);
-			
-		}	);	
-		
-		
-		
-		
-		
-		
+		ViewCC.addActionListener( (ActionEvent e) -> {	System.out.println("ViewCC"); }	);	
+
 		
 		SearchCC.addActionListener( (ActionEvent e) -> {	System.out.println("SearchCC");	}	);
 		
