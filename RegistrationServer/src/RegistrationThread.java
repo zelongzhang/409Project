@@ -17,8 +17,9 @@ public class RegistrationThread implements Runnable
 	
 	public RegistrationThread(Socket clientsocket, DBManager dbmanager)
 	{
-		System.out.println("Accepted new connection..."+clientSocket.getInetAddress()+"on port "+this.clientSocket.getPort());
+		
 		this.clientSocket = clientsocket;
+		System.out.println("Accepted new connection..."+clientSocket.getInetAddress()+"on port "+this.clientSocket.getPort());
 		this.dbManager = dbmanager;
 		try 
 		{

@@ -1,3 +1,4 @@
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -37,7 +38,7 @@ public class ClientRegistrationThread implements Runnable{
 		while(running)
 		{
 			//if(SHOW ALL COURSES BUTTON PUSHED)
-			
+			mf.getViewCC().addActionListener( (ActionEvent e) -> 
 			{
 				Message catalogRequest = new CatalogRequestMessage();
 				try 
@@ -46,18 +47,24 @@ public class ClientRegistrationThread implements Runnable{
 					this.toServer.flush();
 					CatalogDataMessage catalogData = (CatalogDataMessage)this.fromServer.readObject();
 					ArrayList<String> data = catalogData.getCatalog();
-					//Do something with data...
+					System.out.println(data);
 					
 				} 
-				catch (IOException e) 
+				catch (IOException f) 
 				{
-					e.printStackTrace();
+					f.printStackTrace();
 				} 
-				catch (ClassNotFoundException e) 
+				catch (ClassNotFoundException f) 
 				{
-					e.printStackTrace();
+					f.printStackTrace();
 				}
-			}
+				
+				
+				
+			}	);
+			
+			
+			
 		}
 		
 	}

@@ -42,6 +42,8 @@ public class RegistrationClient
 	public static void main(String[] args)
 	{
 		RegistrationClient regClient = new RegistrationClient();
+		System.out.println("Client started...");
+		
 		regClient.start();
 	}
 }

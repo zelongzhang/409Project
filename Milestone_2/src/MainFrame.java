@@ -58,7 +58,7 @@ public class MainFrame extends JFrame{
 		this.add("Center", CenterPanel);
 		
 		
-		ViewCC.addActionListener( (ActionEvent e) -> {	System.out.println("ViewCC"); }	);	
+		
 
 		
 		SearchCC.addActionListener( (ActionEvent e) -> {	System.out.println("SearchCC");	}	);
@@ -86,17 +86,15 @@ public class MainFrame extends JFrame{
 		
 		
 	}
-	
-	
-	
-	
-	
-	
-	public static void main(String[] args) {
-		
-		MainFrame mf = new MainFrame("Schedule Builder");
-		mf.setSize(1000, 563);
 
+	public JButton getViewCC() {
+		return ViewCC;
 	}
+
+	public void setViewCC(JButton viewCC) {
+		ViewCC = viewCC;
+	}
+	
+
 
 }
