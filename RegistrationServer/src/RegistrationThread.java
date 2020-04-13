@@ -17,14 +17,15 @@ public class RegistrationThread implements Runnable
 	
 	public RegistrationThread(Socket clientsocket, DBManager dbmanager)
 	{
-		
+
 		this.clientSocket = clientsocket;
 		System.out.println("Accepted new connection..."+clientSocket.getInetAddress()+"on port "+this.clientSocket.getPort());
 		this.dbManager = dbmanager;
 		try 
 		{
-			this.fromClient = new ObjectInputStream(this.clientSocket.getInputStream());
 			this.toClient = new ObjectOutputStream(this.clientSocket.getOutputStream());
+			this.toClient.flush();
+			this.fromClient = new ObjectInputStream(this.clientSocket.getInputStream());
 		} 
 		catch (IOException e) 
 		{

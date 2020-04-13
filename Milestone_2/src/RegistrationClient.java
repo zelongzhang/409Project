@@ -27,6 +27,7 @@ public class RegistrationClient
 	
 	public void start()
 	{
+		System.out.println("starting client...");
 		Thread clientThread = new Thread(new ClientRegistrationThread(this.clientSocket,this.mf));
 		clientThread.start();
 		try 
