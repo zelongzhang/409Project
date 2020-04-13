@@ -5,7 +5,7 @@ import javax.swing.*;
 import javax.swing.JFrame;
 
 
-//hello
+
 
 public class MainFrame extends JFrame{
 
@@ -43,9 +43,8 @@ public class MainFrame extends JFrame{
 		CenterPanel = new JPanel();
 		records = new JTextArea(100,57);
 		records.setEditable(false);
-		records.append("Maaz- the great\n");
-		records.setText(null);
-		records.append("Saksham is better\n");
+		records.append("initial text\n");
+
 		
 		
 		scroll = new JScrollPane(records, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
@@ -53,18 +52,24 @@ public class MainFrame extends JFrame{
 		CenterPanel.add(scroll);
 		
 		
-		
-		//MainLabel = new JLabel ("Schedule Builder");
-		
-		
-		//this.add("North", MainLabel);
+	
 		this.add("West", WestPanel);
 		this.add("South", SouthPanel);
 		this.add("Center", CenterPanel);
 		
 		
 		
-		ViewCC.addActionListener( (ActionEvent e) -> {	System.out.println("ViewCC");	}	);	
+		ViewCC.addActionListener( (ActionEvent e) -> {	
+			
+			ViewCourseCatalogue VCC = new ViewCourseCatalogue(records);
+			
+		}	);	
+		
+		
+		
+		
+		
+		
 		
 		SearchCC.addActionListener( (ActionEvent e) -> {	System.out.println("SearchCC");	}	);
 		
