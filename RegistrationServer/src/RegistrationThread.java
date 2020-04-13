@@ -3,13 +3,17 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import message.CatalogDataMessage;
+import message.Message;
+
 public class RegistrationThread implements Runnable
 {
 	
 	private Socket clientSocket;
 	private DBManager dbManager;
-	private ObjectInputStream toClient;
-	private ObjectOutputStream fromClient;
+	private ObjectInputStream fromClient;
+	private ObjectOutputStream toClient;
+	private boolean running = true;
 	
 	public RegistrationThread(Socket clientsocket, DBManager dbmanager)
 	{
@@ -18,8 +22,8 @@ public class RegistrationThread implements Runnable
 		this.dbManager = dbmanager;
 		try 
 		{
-			this.toClient = new ObjectInputStream(this.clientSocket.getInputStream());
-			this.fromClient = new ObjectOutputStream(this.clientSocket.getOutputStream());
+			this.fromClient = new ObjectInputStream(this.clientSocket.getInputStream());
+			this.toClient = new ObjectOutputStream(this.clientSocket.getOutputStream());
 		} 
 		catch (IOException e) 
 		{
@@ -30,8 +34,28 @@ public class RegistrationThread implements Runnable
 	@Override
 	public void run() 
 	{
-	
-		
+		while(running)
+		{
+			try 
+			{
+				Message message = (Message) fromClient.readObject();
+				switch(message.getInstruction())
+				{
+				case "CatalogRequest":
+					toClient.writeObject(new CatalogDataMessage(this.dbManager.getCourseCatalog().sendingFormat()));
+					toClient.flush();
+					break;
+				}
+			} 
+			catch (ClassNotFoundException e) 
+			{
+				e.printStackTrace();
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

@@ -64,7 +64,7 @@ public class MainFrame extends JFrame{
 		
 		
 		
-		ViewCC.addActionListener( (ActionEvent e) -> {	System.out.println("ViewCC");	}	);	
+		ViewCC.addActionListener( (ActionEvent e) -> {	System.out.println("ViewCC"); }	);	
 		
 		SearchCC.addActionListener( (ActionEvent e) -> {	System.out.println("SearchCC");	}	);
 		

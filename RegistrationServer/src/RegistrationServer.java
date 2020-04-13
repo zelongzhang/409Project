@@ -32,6 +32,10 @@ public class RegistrationServer
 		this.dbManager.updateCatalog();
 		this.dbManager.updateUsers();
 		System.out.println(this.dbManager);
+		for(String s: this.dbManager.getCourseCatalog().sendingFormat())
+		{
+			System.out.println(s);
+		}
 		
 		while(!end)
 		{

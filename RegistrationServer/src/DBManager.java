@@ -107,4 +107,8 @@ public class DBManager
 			e.printStackTrace();
 		}
 	}
+	public CourseCatalog getCourseCatalog() {
+		return courseCatalog;
+	}
+	
 }
