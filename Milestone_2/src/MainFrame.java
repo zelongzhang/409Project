@@ -87,21 +87,8 @@ public class MainFrame extends JFrame{
 
 		this.setVisible(true);
 		pack();
-		
-		
-		
+		System.out.println("Ending of mainframe");
 	}
 	
-	
-	
-	
-	
-	
-	public static void main(String[] args) {
-		
-		MainFrame mf = new MainFrame("Schedule Builder");
-		mf.setSize(1000, 563);
-
-	}
 
 }

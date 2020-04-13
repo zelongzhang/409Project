@@ -22,8 +22,9 @@ public class ClientRegistrationThread implements Runnable{
 		this.mf = mainframe;
 		try 
 		{
-			this.fromServer = new ObjectInputStream(this.socket.getInputStream());
 			this.toServer = new ObjectOutputStream(this.socket.getOutputStream());
+			this.toServer.flush();
+			this.fromServer = new ObjectInputStream(this.socket.getInputStream());
 		} 
 		catch (IOException e) 
 		{
@@ -37,26 +38,23 @@ public class ClientRegistrationThread implements Runnable{
 		while(running)
 		{
 			//if(SHOW ALL COURSES BUTTON PUSHED)
-			
+			Message catalogRequest = new CatalogRequestMessage();
+			try 
 			{
-				Message catalogRequest = new CatalogRequestMessage();
-				try 
-				{
-					this.toServer.writeObject(catalogRequest);
-					this.toServer.flush();
-					CatalogDataMessage catalogData = (CatalogDataMessage)this.fromServer.readObject();
-					ArrayList<String> data = catalogData.getCatalog();
-					//Do something with data...
-					
-				} 
-				catch (IOException e) 
-				{
-					e.printStackTrace();
-				} 
-				catch (ClassNotFoundException e) 
-				{
-					e.printStackTrace();
-				}
+				this.toServer.writeObject(catalogRequest);
+				this.toServer.flush();
+				CatalogDataMessage catalogData = (CatalogDataMessage)this.fromServer.readObject();
+				ArrayList<String> data = catalogData.getCatalog();
+				System.out.println(data);
+				
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			} 
+			catch (ClassNotFoundException e) 
+			{
+				e.printStackTrace();
 			}
 		}
 		
