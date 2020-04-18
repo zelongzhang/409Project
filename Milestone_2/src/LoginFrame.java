@@ -27,7 +27,7 @@ public class LoginFrame extends JFrame{
 		username = new JLabel("Username: ");
 		password = new JLabel("Password: ");
 		
-		usernameField = new JTextField("123456789",15 );
+		usernameField = new JTextField("Maaz Khurram",15 );
 		passwordField = new JPasswordField(15);
 		
 		centerPanel = new JPanel();
@@ -65,6 +65,22 @@ public class LoginFrame extends JFrame{
 
 	public JButton getExit() {
 		return Exit;
+	}
+
+
+	public String getUsernameField() {
+		return usernameField.getText();
+	}
+
+
+	public String getPasswordField() {
+		
+		return String.valueOf(passwordField.getPassword());
+	}
+
+	public void showError()
+	{
+		JOptionPane.showMessageDialog(null, "The username or password is invalid. Pleasy try again.", "Invalid Login", JOptionPane.ERROR_MESSAGE);
 	}
 
 

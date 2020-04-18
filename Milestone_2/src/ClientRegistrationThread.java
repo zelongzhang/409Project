@@ -4,10 +4,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import message.CatalogDataMessage;
-import message.CatalogRequestMessage;
-import message.Message;
+import message.*;
+import java.util.*;
 
 public class ClientRegistrationThread implements Runnable{
 	
@@ -38,76 +36,108 @@ public class ClientRegistrationThread implements Runnable{
 	@Override
 	public void run() 
 	{
+		
+		createLoginListener();
+		createViewCourseCatalogueListener();
 	
-		lf.getLogin().addActionListener(	(ActionEvent e) ->
-		
-		{
-			System.out.println("Login");
-			
-			
-			mf = new MainFrame("Schedule Builder");
-			mf.setSize(1000, 563);
-			mf.setVisible(true);
-		}
-				
-				
-				
-				);
-		
-		
-		
-		
-		
-		
-			//if(SHOW ALL COURSES BUTTON PUSHED)
-			mf.getViewCC().addActionListener( (ActionEvent e) -> 
-			{
-				mf.getRecords().setText(null);
-				Message catalogRequest = new CatalogRequestMessage();
-				try 
-				{
-					this.toServer.writeObject(catalogRequest);
-					this.toServer.flush();
-					CatalogDataMessage catalogData = (CatalogDataMessage)this.fromServer.readObject();
-					ArrayList<String> data = catalogData.getCatalog();
-					//System.out.println(data);
-					
-					for(String i : data)
-					{
-						//System.out.println(i);
-						String str = new String();
-						String[] contents = i.split(",");
-						str = contents[0]+ contents[1] + ": ";
-						System.out.println(str);
-						if (contents.length%2==0)
-						{
-							for (int k=2; k< contents.length; k++)
-							{
-								str += "[Section: "+ contents[k]+ " (0/" + contents[++k]+")] ";
-							}
-						}
-						else System.err.println("Wrong size of message****");
-						
-						str += "\n";
-						mf.getRecords().append(str);
+	}
 
+	
+	
+	
+	
+	private void createViewCourseCatalogueListener() {
+		//if(SHOW ALL COURSES BUTTON PUSHED)
+		mf.getViewCC().addActionListener( (ActionEvent e) -> 
+		{
+			mf.getRecords().setText(null);
+			Message catalogRequest = new CatalogRequestMessage();
+			try 
+			{
+				this.toServer.writeObject(catalogRequest);
+				this.toServer.flush();
+				CatalogDataMessage catalogData = (CatalogDataMessage)this.fromServer.readObject();
+				ArrayList<String> data = catalogData.getCatalog();
+				//System.out.println(data);
+				
+				for(String i : data)
+				{
+					//System.out.println(i);
+					String str = new String();
+					String[] contents = i.split(",");
+					str = contents[0]+ contents[1] + ": ";
+					System.out.println(str);
+					if (contents.length%2==0)
+					{
+						for (int k=2; k< contents.length; k++)
+						{
+							str += "[Section: "+ contents[k]+ " (0/" + contents[++k]+")] ";
+						}
 					}
+					else System.err.println("Wrong size of message****");
 					
-					
-				} 
-				catch (IOException f) 
-				{
-					f.printStackTrace();
-				} 
-				catch (ClassNotFoundException f) 
-				{
-					f.printStackTrace();
+					str += "\n";
+					mf.getRecords().append(str);
+
 				}
 				
 				
-				
-			}	);
+			} 
+			catch (IOException f) 
+			{
+				f.printStackTrace();
+			} 
+			catch (ClassNotFoundException f) 
+			{
+				f.printStackTrace();
+			}
 			
+			
+			
+		}	);
+		
+	}
+
+	private void createLoginListener() {
+		lf.getLogin().addActionListener((ActionEvent e) ->
+		
+		{
+			System.out.println("Login");
+			Message loginRequest = new LoginRequestMessage();
+			Map<String, String> data = new HashMap<String, String>();
+			data.put("Username", lf.getUsernameField());
+			data.put("Password", lf.getPasswordField());
+			loginRequest.setData(data);
+			
+			try 
+			{
+				this.toServer.writeObject(loginRequest);
+				this.toServer.flush();
+				LoginDataMessage response = (LoginDataMessage) this.fromServer.readObject();
+				
+				if (response.getInstruction().equals("TRUE"))
+				{
+					mf = new MainFrame("Schedule Builder");
+					mf.setSize(1000, 563);
+					mf.setVisible(true);
+				}
+				
+				else if (response.getInstruction().equals("FALSE"))
+				{
+					lf.showError();
+				}
+				
+			}
+			catch (IOException f) 
+			{
+				f.printStackTrace();
+			} 
+			catch (ClassNotFoundException f) 
+			{
+				f.printStackTrace();
+			}
+	
+		});
 		
 	}
 
