@@ -13,14 +13,16 @@ public class ClientRegistrationThread implements Runnable{
 	
 	private Socket socket;
 	private MainFrame mf;
+	private LoginFrame lf;
 	private ObjectInputStream fromServer;
 	private ObjectOutputStream toServer;
 	private boolean running = true;
 	
-	public ClientRegistrationThread(Socket socket, MainFrame mainframe)
+	public ClientRegistrationThread(Socket socket, MainFrame mainframe, LoginFrame loginFrame)
 	{
 		this.socket = socket;
 		this.mf = mainframe;
+		this.lf = loginFrame;
 		try 
 		{
 			this.toServer = new ObjectOutputStream(this.socket.getOutputStream());
@@ -37,8 +39,27 @@ public class ClientRegistrationThread implements Runnable{
 	public void run() 
 	{
 	
+		lf.getLogin().addActionListener(	(ActionEvent e) ->
+		
+		{
+			System.out.println("Login");
+			
+			
+			mf = new MainFrame("Schedule Builder");
+			mf.setSize(1000, 563);
+			mf.setVisible(true);
+		}
+				
+				
+				
+				);
+		
+		
+		
+		
+		
+		
 			//if(SHOW ALL COURSES BUTTON PUSHED)
-
 			mf.getViewCC().addActionListener( (ActionEvent e) -> 
 			{
 				mf.getRecords().setText(null);

@@ -84,10 +84,9 @@ public class MainFrame extends JFrame{
 			}	);
 		
 		Exit.addActionListener( (ActionEvent e) -> {	this.dispose();	}	);
-
-		this.setVisible(true);
+		
 		pack();
-		System.out.println("Ending of mainframe");
+		//System.out.println("Ending of mainframe");
 	}
 
 
