@@ -38,7 +38,12 @@ public class ClientRegistrationThread implements Runnable{
 	{
 		
 		createLoginListener();
-		createViewCourseCatalogueListener();
+
+		
+		
+		
+		
+		
 	
 	}
 
@@ -46,10 +51,59 @@ public class ClientRegistrationThread implements Runnable{
 	
 	
 	
+	private void createLoginListener() {
+			lf.getLogin().addActionListener((ActionEvent e) ->
+			
+			{
+				System.out.println("Login");
+				Message loginRequest = new LoginRequestMessage();
+				Map<String, String> data = new HashMap<String, String>();
+				data.put("Username", lf.getUsernameField());
+				data.put("Password", lf.getPasswordField());
+				loginRequest.setData(data);
+				
+				try 
+				{
+					this.toServer.writeObject(loginRequest);
+					this.toServer.flush();
+					LoginDataMessage response = (LoginDataMessage) this.fromServer.readObject();
+					
+					if (response.getInstruction().equals("TRUE"))
+					{
+						lf.dispose();
+						this.mf = new MainFrame("Schedule Builder");
+						mf.setSize(1000, 563);
+						mf.setVisible(true);
+						createViewCourseCatalogueListener();
+						
+						
+					}
+					
+					
+					else if (response.getInstruction().equals("FALSE"))
+					{
+						lf.showError();
+					}
+					
+				}
+				catch (IOException f) 
+				{
+					f.printStackTrace();
+				} 
+				catch (ClassNotFoundException f) 
+				{
+					f.printStackTrace();
+				}
+		
+			});
+			
+		}
+
 	private void createViewCourseCatalogueListener() {
 		//if(SHOW ALL COURSES BUTTON PUSHED)
 		mf.getViewCC().addActionListener( (ActionEvent e) -> 
 		{
+			System.out.println("View Course Catalogue");
 			mf.getRecords().setText(null);
 			Message catalogRequest = new CatalogRequestMessage();
 			try 
@@ -95,49 +149,6 @@ public class ClientRegistrationThread implements Runnable{
 			
 			
 		}	);
-		
-	}
-
-	private void createLoginListener() {
-		lf.getLogin().addActionListener((ActionEvent e) ->
-		
-		{
-			System.out.println("Login");
-			Message loginRequest = new LoginRequestMessage();
-			Map<String, String> data = new HashMap<String, String>();
-			data.put("Username", lf.getUsernameField());
-			data.put("Password", lf.getPasswordField());
-			loginRequest.setData(data);
-			
-			try 
-			{
-				this.toServer.writeObject(loginRequest);
-				this.toServer.flush();
-				LoginDataMessage response = (LoginDataMessage) this.fromServer.readObject();
-				
-				if (response.getInstruction().equals("TRUE"))
-				{
-					mf = new MainFrame("Schedule Builder");
-					mf.setSize(1000, 563);
-					mf.setVisible(true);
-				}
-				
-				else if (response.getInstruction().equals("FALSE"))
-				{
-					lf.showError();
-				}
-				
-			}
-			catch (IOException f) 
-			{
-				f.printStackTrace();
-			} 
-			catch (ClassNotFoundException f) 
-			{
-				f.printStackTrace();
-			}
-	
-		});
 		
 	}
 
