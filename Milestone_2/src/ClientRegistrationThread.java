@@ -40,118 +40,181 @@ public class ClientRegistrationThread implements Runnable {
 
 	}
 	
-	//*************************************  ACTION LISTENERS ************************************************
+	// ************************************* ACTION LISTENERS************************************************
+
+	private void createRemoveCourseListener() {
+		mf.getRemoveCourse().addActionListener( (ActionEvent e) -> {
+			
+			JTextField CourseName = new JTextField("ENEL", 5);
+			JTextField CourseNumber = new JTextField("343", 5);
+			JTextField CourseSection = new JTextField("1", 5);
+
+			JPanel CourseInfoPanel = new JPanel();
+			CourseInfoPanel.add(new JLabel("Course Name :"));
+			CourseInfoPanel.add(CourseName);
+			CourseInfoPanel.add(Box.createHorizontalStrut(15)); // a spacer
+			CourseInfoPanel.add(new JLabel("Course Number :"));
+			CourseInfoPanel.add(CourseNumber);
+			CourseInfoPanel.add(Box.createHorizontalStrut(15)); // a spacer
+			CourseInfoPanel.add(new JLabel("Course Section :"));
+			CourseInfoPanel.add(CourseSection);
+			
+			int result = JOptionPane.showConfirmDialog(null, CourseInfoPanel, "Please enter course details",
+					JOptionPane.OK_CANCEL_OPTION);
+
+			if (result == JOptionPane.OK_OPTION) {
+				System.out.println("Course Name :" + CourseName.getText());
+				System.out.println("Course Number :" + CourseNumber.getText());
+				System.out.println("Course Section :" + CourseSection.getText());
+
+				Message RemoveCourseRequestMessage = new RemoveCourseRequestMessage();
+				Map<String, String> data = new HashMap<String, String>();
+				data.put("Course Name :", CourseName.getText());
+				data.put("Course Number :", CourseNumber.getText());
+				data.put("Course Section :", CourseSection.getText());
+				RemoveCourseRequestMessage.setData(data);
+				
+				
+				
+//				 try
+//				 {
+//				 this.toServer.writeObject(RemoveCourseRequestMessage);
+//				 this.toServer.flush();
+//				 RemoveCourseDataMessage response = (RemoveCourseDataMessage)
+//				 this.fromServer.readObject();
+//				
+//				 if (response.getInstruction().equals("PASS"))
+//				 {
+//				 JOptionPane.showMessageDialog(null,"Success! Course Removed.");
+//				 }
+//				 else if (response.getInstruction().equals("FAIL"))
+//				 {
+//				 mf.showError((String)response.getData().get("Failure Reason"));
+//				 }
+//				 else System.err.println("Invalid choice by Server side");
+//				
+//				 }
+//				 catch (IOException f) {
+//				 f.printStackTrace();
+//				 } catch (ClassNotFoundException f) {
+//				 f.printStackTrace();
+//				 }
+			}
+
+			}	);
+	
+	}
+
+
 
 	private void createAddCourseListener() {
-		mf.getAddCourse().addActionListener( (ActionEvent e) -> {	
+		mf.getAddCourse().addActionListener((ActionEvent e) -> {
+
+			JTextField CourseName = new JTextField("ENEL", 5);
+			JTextField CourseNumber = new JTextField("343", 5);
+			JTextField CourseSection = new JTextField("1", 5);
+
+			JPanel CourseInfoPanel = new JPanel();
+			CourseInfoPanel.add(new JLabel("Course Name :"));
+			CourseInfoPanel.add(CourseName);
+			CourseInfoPanel.add(Box.createHorizontalStrut(15)); // a spacer
+			CourseInfoPanel.add(new JLabel("Course Number :"));
+			CourseInfoPanel.add(CourseNumber);
+			CourseInfoPanel.add(Box.createHorizontalStrut(15)); // a spacer
+			CourseInfoPanel.add(new JLabel("Course Section :"));
+			CourseInfoPanel.add(CourseSection);
 			
 
-			
-			
-		      JTextField CourseName = new JTextField("ENEL",5);
-		      JTextField CourseNumber = new JTextField("343", 5);
-		      JTextField CourseSection = new JTextField("1", 5);
+			int result = JOptionPane.showConfirmDialog(null, CourseInfoPanel, "Please enter course details",
+					JOptionPane.OK_CANCEL_OPTION);
 
-		      JPanel CourseInfoPanel = new JPanel();
-		      CourseInfoPanel.add(new JLabel("Course Name :"));
-		      CourseInfoPanel.add(CourseName);
-		      CourseInfoPanel.add(Box.createHorizontalStrut(15)); // a spacer
-		      CourseInfoPanel.add(new JLabel("Course Number :"));
-		      CourseInfoPanel.add(CourseNumber);
-		      CourseInfoPanel.add(Box.createHorizontalStrut(15)); // a spacer
-		      CourseInfoPanel.add(new JLabel("Course Section :"));
-		      CourseInfoPanel.add(CourseSection);
+			if (result == JOptionPane.OK_OPTION) {
+				System.out.println("Course Name :" + CourseName.getText());
+				System.out.println("Course Number :" + CourseNumber.getText());
+				System.out.println("Course Section :" + CourseSection.getText());
 
+				Message AddCourseRequestMessage = new AddCourseRequestMessage();
+				Map<String, String> data = new HashMap<String, String>();
+				data.put("Course Name :", CourseName.getText());
+				data.put("Course Number :", CourseNumber.getText());
+				data.put("Course Section :", CourseSection.getText());
+				AddCourseRequestMessage.setData(data);
 
-		      int result = JOptionPane.showConfirmDialog(null, CourseInfoPanel, 
-		               "Please enter course details", JOptionPane.OK_CANCEL_OPTION);
-		      
-		      if (result == JOptionPane.OK_OPTION) {
-		         System.out.println("Course Name :" + CourseName.getText());
-		         System.out.println("Course Number :" + CourseNumber.getText());
-		         System.out.println("Course Section :" + CourseSection.getText());  
-		         
-		         Message AddCourseRequestMessage = new AddCourseRequestMessage();
-		         Map<String,String> data = new HashMap<String, String>();
-		         data.put("Course Name :", CourseName.getText());
-		         data.put("Course Number :", CourseNumber.getText());
-		         data.put("Course Section :", CourseSection.getText());
-		         AddCourseRequestMessage.setData(data);
-		         
-//				try 
-//				{
-//					this.toServer.writeObject(AddCourseRequestMessage);
-//					this.toServer.flush();
-//					AddCourseDataMessage response = (AddCourseDataMessage) this.fromServer.readObject();
-//					
-//					if (response.getInstruction().equals("PASS"))
-//					{
-//						JOptionPane.showMessageDialog(null,"Success! Course added.");  
-//					}
-//					else if (response.getInstruction().equals("FAIL"))
-//					{
-//						mf.showError((String)response.getData().get("Failure Reason"));
-//					} 
-//					else System.err.println("Invalid choice by Server side");
-//						
-//		      }
-//				catch (IOException f) {
-//					f.printStackTrace();
-//				} catch (ClassNotFoundException f) {
-//					f.printStackTrace();
-//				}
+				// try
+				// {
+				// this.toServer.writeObject(AddCourseRequestMessage);
+				// this.toServer.flush();
+				// AddCourseDataMessage response = (AddCourseDataMessage)
+				// this.fromServer.readObject();
+				//
+				// if (response.getInstruction().equals("PASS"))
+				// {
+				// JOptionPane.showMessageDialog(null,"Success! Course added.");
+				// }
+				// else if (response.getInstruction().equals("FAIL"))
+				// {
+				// mf.showError((String)response.getData().get("Failure
+				// Reason"));
+				// }
+				// else System.err.println("Invalid choice by Server side");
+				//
+				// }
+				// catch (IOException f) {
+				// f.printStackTrace();
+				// } catch (ClassNotFoundException f) {
+				// f.printStackTrace();
+				// }
 
 			}
-		      
-		      
-		      
+
 		});
 
 	}
 
 	private void createLoginListener() {
-				lf.getLogin().addActionListener((ActionEvent e) ->
-				
-				{
-					System.out.println("Login");
-					Message loginRequest = new LoginRequestMessage();
-					Map<String, String> data = new HashMap<String, String>();
-					data.put("Username", lf.getUsernameField());
-					data.put("Password", lf.getPasswordField());
-					loginRequest.setData(data);
-					
-	//				try 
-	//				{
-	//					this.toServer.writeObject(loginRequest);
-	//					this.toServer.flush();
-	//					LoginDataMessage response = (LoginDataMessage) this.fromServer.readObject();
-	//					
-	//					if (response.getInstruction().equals("TRUE"))
-	//					{
-							lf.dispose();
-							createMainFrameAndListeners();
-		
-	//					}
-	//					
-	//					
-	//					else if (response.getInstruction().equals("FALSE"))
-	//					{
-	//						lf.showError();
-	//					}
-	//					
-	//				}
-	//				catch (IOException f) 
-	//				{
-	//					f.printStackTrace();
-	//				} 
-	//				catch (ClassNotFoundException f) 
-	//				{
-	//					f.printStackTrace();
-	//				}
-			
-				});
-				
-			}
+		lf.getLogin().addActionListener((ActionEvent e) ->
+
+		{
+			System.out.println("Login");
+			Message loginRequest = new LoginRequestMessage();
+			Map<String, String> data = new HashMap<String, String>();
+			data.put("Username", lf.getUsernameField());
+			data.put("Password", lf.getPasswordField());
+			loginRequest.setData(data);
+
+			// try
+			// {
+			// this.toServer.writeObject(loginRequest);
+			// this.toServer.flush();
+			// LoginDataMessage response = (LoginDataMessage)
+			// this.fromServer.readObject();
+			//
+			// if (response.getInstruction().equals("TRUE"))
+			// {
+			lf.dispose();
+			createMainFrameAndListeners();
+
+			// }
+			//
+			//
+			// else if (response.getInstruction().equals("FALSE"))
+			// {
+			// lf.showError();
+			// }
+			//
+			// }
+			// catch (IOException f)
+			// {
+			// f.printStackTrace();
+			// }
+			// catch (ClassNotFoundException f)
+			// {
+			// f.printStackTrace();
+			// }
+
+		});
+
+	}
 
 	private void createLoginExitListener() {
 		lf.getExit().addActionListener((ActionEvent e) -> {
@@ -209,11 +272,6 @@ public class ClientRegistrationThread implements Runnable {
 		createSearchStudentCoursesListener();
 		createAddCourseListener();
 		createRemoveCourseListener();
-	}
-
-	private void createRemoveCourseListener() {
-		System.err.println("Unimplemented function");
-
 	}
 
 	private void createSearchStudentCoursesListener() {

@@ -74,10 +74,7 @@ public class MainFrame extends JFrame{
 		
 
 		
-		RemoveCourse.addActionListener( (ActionEvent e) -> {	
-			String id = JOptionPane.showInputDialog("Please enter the student's ID");
-			String courseName = JOptionPane.showInputDialog("Please enter the course name");
-			}	);
+
 		
 		Exit.addActionListener( (ActionEvent e) -> {	this.dispose();	}	);
 		
