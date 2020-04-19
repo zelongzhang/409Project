@@ -60,23 +60,7 @@ public class MainFrame extends JFrame{
 		this.add("West", WestPanel);
 		this.add("South", SouthPanel);
 		this.add("Center", CenterPanel);
-		
-		
-		
 
-		
-		SearchCC.addActionListener( (ActionEvent e) -> {	System.out.println("SearchCC");	}	);
-		
-		ViewStudentCourses.addActionListener( (ActionEvent e) -> {	
-			String id = JOptionPane.showInputDialog("Please enter the student's ID");
-			String courseName = JOptionPane.showInputDialog("Please enter the course name");
-			}	);
-		
-
-		
-
-		
-		Exit.addActionListener( (ActionEvent e) -> {	this.dispose();	}	);
 		
 		pack();
 		//System.out.println("Ending of mainframe");
