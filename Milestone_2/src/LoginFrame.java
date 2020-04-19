@@ -16,7 +16,7 @@ public class LoginFrame extends JFrame{
 	{
 		super (title);
 		Login = new JButton("Login");
-		Exit = new JButton ("Exit");
+		Exit = new JButton ("Quit Program");
 		
 		southPanel = new JPanel();
 		southPanel.add(Login);

@@ -2,7 +2,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.*;
-import javax.swing.JFrame;
 
 
 //hello
@@ -22,7 +21,7 @@ public class MainFrame extends JFrame{
 		super(title);
 		ViewCC = new JButton("View Catalogue");
 		SearchCC = new JButton("Search Catalogue");
-		ViewStudentCourses = new JButton("Search Student Courses");
+		ViewStudentCourses = new JButton("View Student Courses");
 		AddCourse = new JButton("Add Course");
 		RemoveCourse = new JButton("Remove Course");
 		Exit = new JButton("Exit");
@@ -73,10 +72,7 @@ public class MainFrame extends JFrame{
 			String courseName = JOptionPane.showInputDialog("Please enter the course name");
 			}	);
 		
-		AddCourse.addActionListener( (ActionEvent e) -> {	
-			String id = JOptionPane.showInputDialog("Please enter the student's ID");
-			String courseName = JOptionPane.showInputDialog("Please enter the course name");
-			}	);
+
 		
 		RemoveCourse.addActionListener( (ActionEvent e) -> {	
 			String id = JOptionPane.showInputDialog("Please enter the student's ID");
@@ -90,6 +86,16 @@ public class MainFrame extends JFrame{
 	}
 
 
+	
+	public void showError(String error)
+	{
+		JOptionPane.showMessageDialog(null, error, "ERROR!", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	
+	
+	
+	
 	public JButton getViewCC() {
 		return ViewCC;
 	}
@@ -106,6 +112,56 @@ public class MainFrame extends JFrame{
 
 	public void setRecords(JTextArea records) {
 		this.records = records;
+	}
+
+
+	public JButton getSearchCC() {
+		return SearchCC;
+	}
+
+
+	public void setSearchCC(JButton searchCC) {
+		SearchCC = searchCC;
+	}
+
+
+	public JButton getViewStudentCourses() {
+		return ViewStudentCourses;
+	}
+
+
+	public void setViewStudentCourses(JButton viewStudentCourses) {
+		ViewStudentCourses = viewStudentCourses;
+	}
+
+
+	public JButton getAddCourse() {
+		return AddCourse;
+	}
+
+
+	public void setAddCourse(JButton addCourse) {
+		AddCourse = addCourse;
+	}
+
+
+	public JButton getRemoveCourse() {
+		return RemoveCourse;
+	}
+
+
+	public void setRemoveCourse(JButton removeCourse) {
+		RemoveCourse = removeCourse;
+	}
+
+
+	public JButton getExit() {
+		return Exit;
+	}
+
+
+	public void setExit(JButton exit) {
+		Exit = exit;
 	}
 	
 
