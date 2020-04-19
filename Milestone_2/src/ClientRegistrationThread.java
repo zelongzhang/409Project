@@ -47,7 +47,6 @@ public class ClientRegistrationThread implements Runnable {
 		mf.getExit().addActionListener( (ActionEvent e) -> {
 			
 			mf.dispose();
-			
 		});
 	}
 	
@@ -411,6 +410,7 @@ public class ClientRegistrationThread implements Runnable {
 		createSearchStudentCoursesListener();
 		createAddCourseListener();
 		createRemoveCourseListener();
+		createMainFrameExitListener();
 	}
 
 }
