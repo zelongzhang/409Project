@@ -71,8 +71,6 @@ public class RegistrationThread implements Runnable
 					toClient.flush();
 					break;
 				case "ViewStudentCourseRequest":
-					toClient.writeObject(new ViewStudentCoursesDataMessage("ViewStudentData", courselist));
-					toClient.flush();
 					
 					break;
 				case "AddRegistrationRequest":
