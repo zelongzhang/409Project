@@ -21,7 +21,18 @@ public class CourseCatalog
 		System.out.println("Course "+courseName+courseNum+" does not exist in the catalog.");
 		return null;
 	}
-
+	public Course searchForCourse(int courseID)
+	{
+		for(Course course : courseList)
+		{
+			if(course.getCourseID()==courseID)
+			{
+				return course;
+			}
+		}
+		System.out.println("Course with courseID"+courseID+" does not exist in the catalog.");
+		return null;
+	}
 	public void addCourse(Course newCourse) 
 	{
 		if(!courseList.contains(newCourse))
@@ -50,7 +61,7 @@ public class CourseCatalog
 			courseString.append(course.getCourseName()+","+course.getCourseNum());
 			for(CourseSection section : course.getSections())
 			{
-				courseString.append(","+section.getSectionNum()+","+section.getSectionCap());
+				courseString.append(","+section.getSectionNum()+","+section.getSectionCap()+","+section.numberOfRegistrations());
 			}
 			data.add(courseString.toString());
 		}

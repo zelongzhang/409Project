@@ -34,6 +34,11 @@ public class CourseSection
 		System.out.println("The registration "+reg+ " does not exist in the section: "+this);
 	}
 	
+	public int numberOfRegistrations()
+	{
+		return this.regList.size();
+	}
+	
 	public String toString()
 	{
 		return "[Section: "+this.sectionNum+" ("+this.regList.size()+"/"+this.sectionCap+")]";
@@ -54,7 +59,7 @@ public class CourseSection
 		return false;
 	}
 
-
+	
 	public int getSectionNum() {
 		return sectionNum;
 	}

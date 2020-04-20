@@ -74,4 +74,9 @@ public class Student extends User
 		}
 		return false;
 	}
+
+	public ArrayList<Course> getPastCourses() {
+		return pastCourses;
+	}
+	
 }

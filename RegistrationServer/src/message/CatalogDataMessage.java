@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class CatalogDataMessage extends Message
 {
 
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 	private ArrayList<String> catalog;
 	
 	public CatalogDataMessage(ArrayList<String> cat)

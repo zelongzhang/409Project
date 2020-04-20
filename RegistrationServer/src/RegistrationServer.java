@@ -32,7 +32,13 @@ public class RegistrationServer
 		System.out.println("Registration server starting...");
 		this.dbManager.updateCatalog();
 		this.dbManager.updateUsers();
+		this.dbManager.updateRegistrations();
 		System.out.println(this.dbManager);
+		for(Course c: ((Student)this.dbManager.getUserList().get(0)).getPastCourses())
+		{
+			System.out.print(c.getCourseName()+c.getCourseNum()+" ");
+		}
+		System.out.println();
 		for(String s: this.dbManager.getCourseCatalog().sendingFormat())
 		{
 			System.out.println(s);

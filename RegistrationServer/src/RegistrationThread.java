@@ -47,6 +47,7 @@ public class RegistrationThread implements Runnable
 					toClient.writeObject(new CatalogDataMessage(this.dbManager.getCourseCatalog().sendingFormat()));
 					toClient.flush();
 					break;
+				case "
 				}
 			} 
 			catch (ClassNotFoundException e) 

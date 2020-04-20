@@ -4,14 +4,16 @@ public class Course
 {
 	private String courseName;
 	private int courseNum;
+	private int courseID;
 	private ArrayList<Course> prereq;
 	private ArrayList<CourseSection> sections;
 	
 	
-	public Course(String courseName, int courseNum)
+	public Course(String courseName, int courseNum, int courseID)
 	{
 		this.courseName = courseName;
 		this.courseNum = courseNum;
+		this.courseID = courseID;
 		this.prereq = new ArrayList<Course>();
 		this.sections = new ArrayList<CourseSection>();
 	}
@@ -99,6 +101,10 @@ public class Course
 
 	public ArrayList<CourseSection> getSections() {
 		return sections;
+	}
+
+	public int getCourseID() {
+		return courseID;
 	}
 
 	
