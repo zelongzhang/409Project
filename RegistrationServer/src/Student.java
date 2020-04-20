@@ -53,7 +53,12 @@ public class Student extends User
 		}
 		System.out.println("The course "+reg.getCourseSection()+" was not found in student("+this+")'s registration list.");
 	}
-	
+		
+	public ArrayList<String> coursesSendingFormat() 
+	{
+		
+		return null;
+	}
 	public String toString()
 	{
 		return this.getUsername()+":"+this.getUserID();
@@ -78,5 +83,7 @@ public class Student extends User
 	public ArrayList<Course> getPastCourses() {
 		return pastCourses;
 	}
+
+
 	
 }

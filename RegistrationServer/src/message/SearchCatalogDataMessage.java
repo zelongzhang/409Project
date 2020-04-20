@@ -12,7 +12,7 @@ public class SearchCatalogDataMessage extends Message{
 		super("CourseData");
 		this.searchResult = searchresult;
 	}
-	public ArrayList<String> getCatalog()
+	public ArrayList<String> getSearchResult()
 	{
 		return this.searchResult;
 	}

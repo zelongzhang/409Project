@@ -61,7 +61,7 @@ public class CourseCatalog
 			courseString.append(course.getCourseName()+","+course.getCourseNum());
 			for(CourseSection section : course.getSections())
 			{
-				courseString.append(","+section.getSectionNum()+","+section.getSectionCap()+","+section.numberOfRegistrations());
+				courseString.append(","+section.getSectionNum()+","+section.numberOfRegistrations()+","+section.getSectionCap());
 			}
 			data.add(courseString.toString());
 		}
