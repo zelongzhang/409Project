@@ -145,10 +145,11 @@ public class RegistrationThread implements Runnable
 					toClient.flush();
 					System.out.println("end remove");
 					break;
-				case "SearchReqeuest":
+				case "SearchRequest":
 					String courseName = ((SearchCatalogRequestMessage)message).getCourseName();
 					int courseNum = ((SearchCatalogRequestMessage)message).getCourseNum();
 					Course course = this.dbManager.getCourseCatalog().searchForCourse(courseName, courseNum);
+					System.out.println(course);
 					if(course == null)
 					{
 						toClient.writeObject(new SearchCatalogDataMessage(""));

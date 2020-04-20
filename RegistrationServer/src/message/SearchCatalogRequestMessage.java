@@ -9,7 +9,7 @@ public class SearchCatalogRequestMessage extends Message {
 	private int sectionNum;
 	public SearchCatalogRequestMessage(String coursename, int coursenum, int sectionnum) 
 	{
-		super("SearchCatalogueRequestMessage");
+		super("SearchRequest");
 		this.courseName = coursename;
 		this.courseNum = coursenum;
 		this.sectionNum = sectionnum;
