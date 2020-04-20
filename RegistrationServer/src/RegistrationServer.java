@@ -27,7 +27,7 @@ public class RegistrationServer
 			return;
 		}
 	}
-	protected void start()
+	protected void start() throws InterruptedException
 	{
 		System.out.println("Registration server starting...");
 		this.dbManager.updateCatalog();
@@ -55,15 +55,9 @@ public class RegistrationServer
 				e.printStackTrace();
 			}
 		}
-		try 
-		{
-			this.clientThreadPool.shutdown();
-			this.clientThreadPool.awaitTermination(5, TimeUnit.SECONDS);
-		} 
-		catch (InterruptedException e) 
-		{
-			e.printStackTrace();
-		}
+
+		this.clientThreadPool.shutdown();
+		this.clientThreadPool.awaitTermination(5, TimeUnit.SECONDS);
 	}
 	
 	

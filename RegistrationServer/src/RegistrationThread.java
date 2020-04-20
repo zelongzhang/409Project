@@ -4,15 +4,17 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import message.CatalogDataMessage;
+import message.LoginRequestMessage;
 import message.Message;
 import message.ResponseMessage;
+import message.ViewStudentCoursesDataMessage;
 
 public class RegistrationThread implements Runnable
 {
 	
 	private Socket clientSocket;
 	private DBManager dbManager;
-	private User Student;
+	private Student student;
 	private ObjectInputStream fromClient;
 	private ObjectOutputStream toClient;
 	private boolean running = true;
@@ -46,12 +48,31 @@ public class RegistrationThread implements Runnable
 				switch(message.getInstruction())
 				{
 					
+				case "LoginRequest":
+					String username = ((LoginRequestMessage)message).getUsername();
+					String password = ((LoginRequestMessage)message).getPassword();
+					this.student = this.dbManager.findStudent(username);
+					if(this.student == null)
+					{
+						toClient.writeObject(new ResponseMessage("FAIL", "The user name is not registered."));
+					}
+					else if(!this.student.getPassword().equals(password))
+					{
+						toClient.writeObject(new ResponseMessage("FAIL", "Incorrect password."));
+					}
+					else
+					{
+						toClient.writeObject(new ResponseMessage("SUCCESS" , ""));
+					}
+					toClient.flush();
+					break;
 				case "CatalogRequest":
 					toClient.writeObject(new CatalogDataMessage(this.dbManager.getCourseCatalog().sendingFormat()));
 					toClient.flush();
 					break;
 				case "ViewStudentCourseRequest":
-					
+					toClient.writeObject(new ViewStudentCoursesDataMessage("ViewStudentData", courselist));
+					toClient.flush();
 					
 					break;
 				case "AddRegistrationRequest":
@@ -65,11 +86,7 @@ public class RegistrationThread implements Runnable
 				case "SearchReqeuest":
 					
 					break;
-				case "LoginRequest":
-					toClient.writeObject(new ResponseMessage("SUCCESS" , ""));
-					toClient.flush();
 
-					break;
 				}
 			} 
 			catch (ClassNotFoundException e) 
