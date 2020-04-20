@@ -4,19 +4,12 @@ import java.util.Map;
 
 public abstract class Message implements Serializable
 {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 0L;
 	String instruction;
-	Map<?,?> data;
 	
 	public Message(String instruction)
 	{
 		this.instruction = instruction;
-	}
-	
-
-
-	public void setData(Map<?,?> data) {
-		this.data = data;
 	}
 
 	public String getInstruction()
@@ -24,10 +17,6 @@ public abstract class Message implements Serializable
 		return this.instruction;
 	}
 	
-	public Map<?,?> getData()
-	{
-		return this.data;
-	}
 	
 }
 

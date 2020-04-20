@@ -2,21 +2,19 @@ package message;
 
 import java.util.ArrayList;
 
-public class ViewStudentCoursesDataMessage extends Message {
-	
-	
-	
-	private static final long serialVersionUID = 3L;
-	private ArrayList<String> catalog;
-	
-	public ViewStudentCoursesDataMessage(ArrayList<String> cat)
-	{
-		super("CatalogData");
-		this.catalog = cat;
-	}
-	public ArrayList<String> getCatalog()
-	{
-		return this.catalog;
-	}
+public class ViewStudentCoursesDataMessage extends Message
+{
 
+
+	private static final long serialVersionUID = 6L;
+	private ArrayList<String> courseList;
+	public ViewStudentCoursesDataMessage(String instruction, ArrayList<String> courselist) {
+		super("ViewStudentCoursesData");
+		this.courseList = courselist;
+	}
+	
+	public ArrayList<String> getCourseList() {
+		return courseList;
+	}
+	
 }

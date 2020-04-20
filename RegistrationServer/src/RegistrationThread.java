@@ -5,6 +5,7 @@ import java.net.Socket;
 
 import message.CatalogDataMessage;
 import message.Message;
+import message.ResponseMessage;
 
 public class RegistrationThread implements Runnable
 {
@@ -47,7 +48,10 @@ public class RegistrationThread implements Runnable
 					toClient.writeObject(new CatalogDataMessage(this.dbManager.getCourseCatalog().sendingFormat()));
 					toClient.flush();
 					break;
-				case "
+				case "LoginRequest":
+					toClient.writeObject(new ResponseMessage("SUCCESS" , ""));
+					toClient.flush();
+					break;
 				}
 			} 
 			catch (ClassNotFoundException e) 
