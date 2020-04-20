@@ -11,6 +11,7 @@ public class RegistrationThread implements Runnable
 	
 	private Socket clientSocket;
 	private DBManager dbManager;
+	private User Student;
 	private ObjectInputStream fromClient;
 	private ObjectOutputStream toClient;
 	private boolean running = true;
@@ -43,11 +44,30 @@ public class RegistrationThread implements Runnable
 				Message message = (Message) fromClient.readObject();
 				switch(message.getInstruction())
 				{
+				case "LoginRequest":
+					
+					
+					break;
 				case "CatalogRequest":
 					toClient.writeObject(new CatalogDataMessage(this.dbManager.getCourseCatalog().sendingFormat()));
 					toClient.flush();
 					break;
-				case "
+				case "ViewStudentCourseRequest":
+					
+					
+					break;
+				case "AddRegistrationRequest":
+					
+					
+					break;
+				case "RemoveRegistrationRequest":
+					
+					
+					break;
+				case "SearchReqeuest":
+					
+					
+					break;
 				}
 			} 
 			catch (ClassNotFoundException e) 
