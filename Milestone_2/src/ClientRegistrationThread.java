@@ -204,28 +204,28 @@ public class ClientRegistrationThread implements Runnable {
 		Message AddCourseRequestMessage = new AddRegistrationMessage(courseName, Integer.parseInt(courseNumber), Integer.parseInt(courseSection));
 
 
-//		 try
-//		 {
-//		 this.toServer.writeObject(AddCourseRequestMessage);
-//		 this.toServer.flush();
-//		 ResponseMessage response = (ResponseMessage)this.fromServer.readObject();
-//		
-//		 if (response.getInstruction().equals("SUCCESS"))
-//		 {
-//		 JOptionPane.showMessageDialog(null,"Success! Course added.");
-//		 }
-//		 else if (response.getInstruction().equals("FAIL"))
-//		 {
-//		 mf.showError((String)response.getFailureMessage());
-//		 }
-//		 else System.err.println("Invalid choice by Server side");
-//		
-//		 }
-//		 catch (IOException f) {
-//		 f.printStackTrace();
-//		 } catch (ClassNotFoundException f) {
-//		 f.printStackTrace();
-//		 }
+		 try
+		 {
+		 this.toServer.writeObject(AddCourseRequestMessage);
+		 this.toServer.flush();
+		 ResponseMessage response = (ResponseMessage)this.fromServer.readObject();
+		
+		 if (response.getInstruction().equals("SUCCESS"))
+		 {
+		 JOptionPane.showMessageDialog(null,"Success! Course added.");
+		 }
+		 else if (response.getInstruction().equals("FAIL"))
+		 {
+		 mf.showError((String)response.getFailureMessage());
+		 }
+		 else System.err.println("Invalid choice by Server side");
+		
+		 }
+		 catch (IOException f) {
+		 f.printStackTrace();
+		 } catch (ClassNotFoundException f) {
+		 f.printStackTrace();
+		 }
 		
 	}
 
@@ -313,28 +313,28 @@ public class ClientRegistrationThread implements Runnable {
 		Message RemoveCourseRequest = new RemoveRegistrationMessage(courseName, Integer.parseInt(courseNumber), Integer.parseInt(courseSection));
 		
 	
-//		 try
-//		 {
-//		 this.toServer.writeObject(RemoveCourseRequest);
-//		 this.toServer.flush();
-//		 ResponseMessage response = (ResponseMessage)this.fromServer.readObject();
-//		
-//		 if (response.getInstruction().equals("SUCCESS"))
-//		 {
-//		 JOptionPane.showMessageDialog(null,"Success! Course Removed.");
-//		 }
-//		 else if (response.getInstruction().equals("FAIL"))
-//		 {
-//		 mf.showError((String)response.getFailureMessage());
-//		 }
-//		 else System.err.println("Invalid choice by Server side");
-//		
-//		 }
-//		 catch (IOException f) {
-//		 f.printStackTrace();
-//		 } catch (ClassNotFoundException f) {
-//		 f.printStackTrace();
-//		 }
+		 try
+		 {
+		 this.toServer.writeObject(RemoveCourseRequest);
+		 this.toServer.flush();
+		 ResponseMessage response = (ResponseMessage)this.fromServer.readObject();
+		
+		 if (response.getInstruction().equals("SUCCESS"))
+		 {
+		 JOptionPane.showMessageDialog(null,"Success! Course Removed.");
+		 }
+		 else if (response.getInstruction().equals("FAIL"))
+		 {
+		 mf.showError((String)response.getFailureMessage());
+		 }
+		 else System.err.println("Invalid choice by Server side");
+		
+		 }
+		 catch (IOException f) {
+		 f.printStackTrace();
+		 } catch (ClassNotFoundException f) {
+		 f.printStackTrace();
+		 }
 		
 		
 	}
@@ -375,12 +375,12 @@ public class ClientRegistrationThread implements Runnable {
 					String[] contents = i.split(",");
 					str = contents[0] + contents[1] + ": ";
 					System.out.println(str);
-					if (contents.length % 2 == 0) {
+					if (contents.length == 5) {
 						for (int k = 2; k < contents.length; k++) {
 							str += "[Section: " + contents[k] + " ("+contents[++k] +"/" + contents[++k] + ")] ";
 						}
 					} else
-						System.err.println("Wrong size of message****");
+						System.err.println("Wrong size of message****"+contents.length);
 	
 					str += "\n";
 					mf.getRecords().append(str);

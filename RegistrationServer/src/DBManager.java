@@ -1,7 +1,3 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -40,8 +36,8 @@ public class DBManager
 	
 	public void updateCatalog()
 	{
-		//readMockCourses();
 		readCourses();
+		readPrereqs();
 		System.out.println("finished updating catalog");
 	}
 	
@@ -56,63 +52,52 @@ public class DBManager
 		readRegistrations();
 		System.out.println("finished updating registrations");
 	}
-	public void addCourseToDB(Course course)
-	{
-		//TODO
-	}
-	public void removeCourseFromDB(Course course)
-	{
-		//TODO
-	}
-	public void addSectionToDB(Course course, CourseSection section)
-	{
-		//TODO
-	}
-	public void removeSectionFromDB(Course course, CourseSection section)
-	{
-		//TODO
-	}
-	public void addUserToDB(User user)
-	{
-		//TODO
-	}
-	public void removeUserFromDB(User user)
-	{
-		//TODO
-	}
+
 	
 	public void addRegistrationToDB(Registration registration)
 	{
-		//TODO
+		Student student = registration.getStudent();
+		CourseSection section = registration.getCourseSection();
+		try 
+		{
+			Statement lookForStudent = this.dbConnection.createStatement();
+			ResultSet studentRow = lookForStudent.executeQuery("SELECT * FROM users WHERE ID = "+student.getUserID());
+			studentRow.next();
+			String newRegistrationString = studentRow.getString("registrations")+","+section.getCourse().getCourseID()+" "+section.getSectionNum();
+			String updateStudents = "UPDATE users "
+					+" SET registrations = '"+newRegistrationString+"'"
+					+ "WHERE ID = "+studentRow.getInt("ID");
+			Statement updateRegistrationStudent = this.dbConnection.createStatement();
+			updateRegistrationStudent.executeUpdate(updateStudents);
+			studentRow.close();
+			lookForStudent.close();
+			updateRegistrationStudent.close();
+			
+			Statement lookForSection = this.dbConnection.createStatement();
+			ResultSet sectionRow = lookForSection.executeQuery("SELECT * FROM sections WHERE courseID ="+section.getCourse().getCourseID()+" AND sectionNum = "+section.getSectionNum());
+			sectionRow.next();
+			String newStudentListString = sectionRow.getString("registrations")+","+student.getUsername();
+			String updateSection = "UPDATE sections "
+					+" SET registrations = '"+newStudentListString+"'"
+					+ "WHERE sectionID = "+sectionRow.getInt("sectionID");
+			Statement updateRegistrationSection = this.dbConnection.createStatement();
+			updateRegistrationSection.executeUpdate(updateSection);
+			sectionRow.close();
+			lookForSection.close();
+			updateRegistrationSection.close();
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void removeRegistrationFromDB(Registration registration)
 	{
 		//TODO
 	}
-//	public void readMockCourses()
-//	{
-//		try 
-//		{
-//			BufferedReader br = new BufferedReader(new FileReader("MockCourses"));
-//			String line = br.readLine();
-//			while(line!=null)
-//			{
-//				String content[] =line.split(",");
-//				Course newCourse = new Course(content[0], Integer.parseInt(content[1]));
-//				newCourse.addSection(new CourseSection(Integer.parseInt(content[2]),Integer.parseInt(content[3])));
-//				newCourse.addSection(new CourseSection(Integer.parseInt(content[4]),Integer.parseInt(content[5])));
-//				this.courseCatalog.addCourse(newCourse);
-//				line = br.readLine();
-//			}
-//		} 
-//		catch (FileNotFoundException e) 
-//		{
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
+
 	public void readCourses()
 	{
 		this.courseCatalog = new CourseCatalog();
@@ -128,40 +113,52 @@ public class DBManager
 				ResultSet sections = sectionStm.executeQuery("select * from sections where courseID ="+courses.getInt("courseID"));
 				while(sections.next())
 				{
-					CourseSection newSection = new CourseSection(sections.getInt("sectionNum"),sections.getInt("capacity"));
+					CourseSection newSection = new CourseSection(sections.getInt("sectionNum"),sections.getInt("capacity"),newCourse);
 					newCourse.addSection(newSection);
 				}
 				this.courseCatalog.addCourse(newCourse);
+				sectionStm.close();
+				sections.close();
 			}
+			courseStm.close();
+			courses.close();
 		}
+		
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
 		
 	}
-	
-//	public void readMockStudents()
-//	{
-//		try 
-//		{
-//			BufferedReader br = new BufferedReader(new FileReader("MockStudents"));
-//			String line = br.readLine();
-//			while(line!=null)
-//			{
-//				String content[] = line.split(",");
-//				Student newStudent = new Student(content[0],content[1], Integer.parseInt(content[2]));
-//				this.userList.add(newStudent);
-//				line = br.readLine();
-//			}
-//		} 
-//		catch (FileNotFoundException e) 
-//		{
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
+	public void readPrereqs()
+	{
+		try 
+		{
+			Statement courseStm = this.dbConnection.createStatement();
+			ResultSet courses = courseStm.executeQuery("select * from courses");
+			while(courses.next())
+			{
+				Course course = this.courseCatalog.searchForCourse(courses.getInt("courseID"));
+				String prereqsString = courses.getString("prereq");
+				if(prereqsString!=null)
+				{
+					String prereqs[] = prereqsString.split(",");
+					for(String pre : prereqs)
+					{
+						System.out.println(pre);
+						Course prereqCourse = this.courseCatalog.searchForCourse(pre.split(" ")[0],Integer.parseInt(pre.split(" ")[1]));
+						course.addPrereq(prereqCourse);
+					}
+				}
+			}
+			courseStm.close();
+			courses.close();
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+	}
 	
 	public void readStudents()
 	{
@@ -183,6 +180,8 @@ public class DBManager
 				}
 				this.userList.add(newStudent);
 			}
+			studentStm.close();
+			students.close();
 		}
 		catch (SQLException e) 
 		{
@@ -224,6 +223,8 @@ public class DBManager
 					}
 				}
 			}
+			studentStm.close();
+			students.close();
 		}
 		catch (SQLException e) 
 		{

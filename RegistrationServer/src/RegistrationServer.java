@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +28,7 @@ public class RegistrationServer
 			return;
 		}
 	}
-	protected void start() throws InterruptedException
+	protected void start() throws InterruptedException, SocketException
 	{
 		System.out.println("Registration server starting...");
 		this.dbManager.updateCatalog();
@@ -39,7 +40,11 @@ public class RegistrationServer
 			System.out.print(c.getCourseName()+c.getCourseNum()+" ");
 		}
 		System.out.println();
-		for(String s: this.dbManager.getCourseCatalog().sendingFormat())
+		for(Registration reg: ((Student)this.dbManager.getUserList().get(0)).getRegList())
+		{
+			System.out.println(reg);
+		}
+		for(String s: this.dbManager.getCourseCatalog().toSendFormat())
 		{
 			System.out.println(s);
 		}
@@ -61,7 +66,7 @@ public class RegistrationServer
 	}
 	
 	
-	public static void main(String[] args) throws InterruptedException
+	public static void main(String[] args) throws InterruptedException, SocketException
 	{
 		RegistrationServer regServer = new RegistrationServer();
 		regServer.start();

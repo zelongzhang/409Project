@@ -58,7 +58,16 @@ public class Course
 		}
 		System.out.println("The course "+req+" was not found in the prereq of "+this);
 	}
-	
+	public String toSendFormat()
+	{
+		StringBuilder courseString = new StringBuilder();
+		courseString.append(this.getCourseName()+","+this.getCourseNum());
+		for(CourseSection section : this.getSections())
+		{
+			courseString.append(","+section.getSectionNum()+","+section.numberOfRegistrations()+","+section.getSectionCap());
+		}
+		return courseString.toString();
+	}
 	public String toString()
 	{
 		return this.courseName+this.courseNum;
@@ -107,5 +116,9 @@ public class Course
 		return courseID;
 	}
 
+	public ArrayList<Course> getPrereq() {
+		return prereq;
+	}
+	
 	
 }

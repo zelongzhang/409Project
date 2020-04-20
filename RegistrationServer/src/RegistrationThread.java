@@ -3,11 +3,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import message.AddRegistrationMessage;
 import message.CatalogDataMessage;
 import message.LoginRequestMessage;
 import message.Message;
+import message.RemoveRegistrationMessage;
 import message.ResponseMessage;
+import message.SearchCatalogDataMessage;
+import message.SearchCatalogRequestMessage;
 import message.ViewStudentCoursesDataMessage;
+
 
 public class RegistrationThread implements Runnable
 {
@@ -17,6 +22,7 @@ public class RegistrationThread implements Runnable
 	private Student student;
 	private ObjectInputStream fromClient;
 	private ObjectOutputStream toClient;
+	private int maxCourseLoad = 6;
 	private boolean running = true;
 	
 	public RegistrationThread(Socket clientsocket, DBManager dbmanager)
@@ -67,24 +73,94 @@ public class RegistrationThread implements Runnable
 					toClient.flush();
 					break;
 				case "CatalogRequest":
-					toClient.writeObject(new CatalogDataMessage(this.dbManager.getCourseCatalog().sendingFormat()));
+					toClient.writeObject(new CatalogDataMessage(this.dbManager.getCourseCatalog().toSendFormat()));
 					toClient.flush();
 					break;
 				case "ViewStudentCourseRequest":
-					
+					toClient.writeObject(new ViewStudentCoursesDataMessage("ViewStudentData", this.student.coursesToSendFormat()));
+					toClient.flush();
 					break;
 				case "AddRegistrationRequest":
-					
-					
+					String courseNameToAdd = ((AddRegistrationMessage)message).getCourseName();
+					int courseNumToAdd = ((AddRegistrationMessage)message).getCourseNum();
+					int sectionNumToAdd = ((AddRegistrationMessage)message).getSectionNum();
+					CourseSection sectionToAdd = this.dbManager.getCourseCatalog().searchForCourse(courseNameToAdd, courseNumToAdd).searchForSection(sectionNumToAdd);
+					System.out.println("student has "+this.student.getRegList().size()+" courses");
+					for(Registration reg : this.student.getRegList())
+					{
+						System.out.println(reg);
+					}
+					System.out.println(this.student.getPastCourses().containsAll(sectionToAdd.getCourse().getPrereq()));
+					for(Course c:this.student.getPastCourses())
+					{
+						System.out.println(c);
+					}
+					System.out.println();System.out.println();
+					for(Course c:sectionToAdd.getCourse().getPrereq())
+					{
+						System.out.println(c);
+					}
+					if(this.student.getRegList().size()>=maxCourseLoad)
+					{
+						toClient.writeObject(new ResponseMessage("FAIL","Cannot register for more than max course load(6 courses)."));
+					}
+					else if(this.student.isAlreadyRegistered(sectionToAdd))
+					{
+						toClient.writeObject(new ResponseMessage("FAIL","Cannot register in the same course twice."));
+					}
+					else if(!this.student.getPastCourses().containsAll(sectionToAdd.getCourse().getPrereq()))
+					{
+						toClient.writeObject(new ResponseMessage("FAIL","Prereqs are not met."));
+					}
+					else
+					{
+						Registration regToAdd = new Registration(this.student,sectionToAdd);
+						this.student.addRegistration(regToAdd);
+						sectionToAdd.addRegistration(regToAdd);
+						this.dbManager.addRegistrationToDB(regToAdd);
+						toClient.writeObject(new ResponseMessage("SUCCESS",""));
+					}
+					toClient.flush();
 					break;
 				case "RemoveRegistrationRequest":
-					
-					
+					System.out.println("remove start");
+					String courseNameToRemove = ((RemoveRegistrationMessage)message).getCourseName();
+					int courseNumToRemove = ((RemoveRegistrationMessage)message).getCourseNum();
+					int sectionNumToRemove = ((RemoveRegistrationMessage)message).getSectionNum();
+					System.out.println(courseNameToRemove+courseNumToRemove+" "+sectionNumToRemove);
+					CourseSection sectionToRemove = this.dbManager.getCourseCatalog().searchForCourse(courseNameToRemove, courseNumToRemove).searchForSection(sectionNumToRemove);
+					Registration regToRemove = this.student.lookForRegistration(sectionToRemove);
+					if(regToRemove == null)
+					{
+						toClient.writeObject(new ResponseMessage("FAIL","Cannot remove a course without registering in it."));
+					}
+					else
+					{
+						this.student.removeRegistration(regToRemove);
+						sectionToRemove.removeRegistration(regToRemove);
+						this.dbManager.removeRegistrationFromDB(regToRemove);
+						toClient.writeObject(new ResponseMessage("SUCCESS",""));
+					}
+					toClient.flush();
+					System.out.println("end remove");
 					break;
 				case "SearchReqeuest":
-					
+					String courseName = ((SearchCatalogRequestMessage)message).getCourseName();
+					int courseNum = ((SearchCatalogRequestMessage)message).getCourseNum();
+					Course course = this.dbManager.getCourseCatalog().searchForCourse(courseName, courseNum);
+					if(course == null)
+					{
+						toClient.writeObject(new ResponseMessage("FAIL","Search did not return any results, Please use the format COURSENAME COURSENUMBER."));
+					}
+					else
+					{
+						toClient.writeObject(new SearchCatalogDataMessage(course.toSendFormat()));
+					}
+					toClient.flush();
 					break;
-
+				case "Quit":
+					this.running = false;
+					break;
 				}
 			} 
 			catch (ClassNotFoundException e) 
@@ -99,5 +175,6 @@ public class RegistrationThread implements Runnable
 			}
 		}
 	}
+
 
 }

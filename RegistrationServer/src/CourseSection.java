@@ -4,12 +4,14 @@ public class CourseSection
 {
 	private int sectionNum;
 	private int sectionCap;
+	private Course course;
 	private ArrayList<Registration> regList;
 	
-	public CourseSection(int num, int cap)
+	public CourseSection(int num, int cap, Course course)
 	{
 		this.sectionNum = num;
 		this.sectionCap = cap;
+		this.course = course;
 		this.regList = new ArrayList<Registration>();
 	}
 	
@@ -38,10 +40,13 @@ public class CourseSection
 	{
 		return this.regList.size();
 	}
-	
+	public String toSendFormat()
+	{
+		return this.getCourse().getCourseName()+","+this.getCourse().getCourseNum()+","+this.sectionNum+","+this.regList.size()+","+this.sectionCap;
+	}
 	public String toString()
 	{
-		return "[Section: "+this.sectionNum+" ("+this.regList.size()+"/"+this.sectionCap+")]";
+		return "[Course: "+this.course.getCourseName()+this.course.getCourseNum()+" Section: "+this.sectionNum+" ("+this.regList.size()+"/"+this.sectionCap+")]";
 	}
 	
 	public boolean equals(Object o)
@@ -52,7 +57,8 @@ public class CourseSection
 		}
 		if(o instanceof CourseSection
 				&& ((CourseSection)o).getSectionNum() == this.getSectionNum()
-				&& ((CourseSection)o).getSectionCap() == this.getSectionCap())
+				&& ((CourseSection)o).getSectionCap() == this.getSectionCap()
+				&& ((CourseSection)o).getCourse().equals(this.getCourse())	)
 		{
 			return true;
 		}
@@ -67,5 +73,8 @@ public class CourseSection
 	public int getSectionCap() {
 		return sectionCap;
 	}
-	
+	public Course getCourse()
+	{
+		return this.course;
+	}
 }

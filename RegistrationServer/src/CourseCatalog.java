@@ -52,18 +52,12 @@ public class CourseCatalog
 		}
 		System.out.println("Course "+course+" was not found in the catalog.");
 	}
-	public ArrayList<String> sendingFormat()
+	public ArrayList<String> toSendFormat()
 	{
 		ArrayList<String> data = new ArrayList<String>();
 		for(Course course : this.courseList)
 		{
-			StringBuilder courseString = new StringBuilder();
-			courseString.append(course.getCourseName()+","+course.getCourseNum());
-			for(CourseSection section : course.getSections())
-			{
-				courseString.append(","+section.getSectionNum()+","+section.numberOfRegistrations()+","+section.getSectionCap());
-			}
-			data.add(courseString.toString());
+			data.add(course.toSendFormat());
 		}
 		return data;
 	}
@@ -76,6 +70,11 @@ public class CourseCatalog
 			for(CourseSection sec: c.getSections())
 			{
 				s+=sec.toString()+" ";
+			}
+			s+=", Prereqs: ";
+			for(Course pre : c.getPrereq())
+			{
+				s+=pre.getCourseName()+pre.getCourseNum()+",";
 			}
 			s+="\n";
 		}

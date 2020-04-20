@@ -54,10 +54,37 @@ public class Student extends User
 		System.out.println("The course "+reg.getCourseSection()+" was not found in student("+this+")'s registration list.");
 	}
 		
-	public ArrayList<String> coursesSendingFormat() 
+	public ArrayList<String> coursesToSendFormat() 
 	{
-		
+		ArrayList<String> send = new ArrayList<String>();
+		for(Registration reg : this.regList)
+		{
+			CourseSection section = reg.getCourseSection();
+			send.add(section.toSendFormat());
+		}
+		return send;
+	}	
+	public Registration lookForRegistration(CourseSection section)
+	{
+		for(Registration reg: this.regList)
+		{
+			if(reg.getCourseSection().equals(section))
+			{
+				return reg;
+			}
+		}
 		return null;
+	}
+	public boolean isAlreadyRegistered(CourseSection sectionToAdd) 
+	{
+		for(Registration reg : this.regList)
+		{
+			if(reg.getCourseSection().getCourse().equals(sectionToAdd.getCourse()))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	public String toString()
 	{
@@ -84,6 +111,12 @@ public class Student extends User
 		return pastCourses;
 	}
 
+	public ArrayList<Registration> getRegList() {
+		return regList;
+	}
+
+
+	
 
 	
 }
