@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import message.AddRegistrationMessage;
 import message.CatalogDataMessage;
@@ -150,7 +151,7 @@ public class RegistrationThread implements Runnable
 					Course course = this.dbManager.getCourseCatalog().searchForCourse(courseName, courseNum);
 					if(course == null)
 					{
-						toClient.writeObject(new ResponseMessage("FAIL","Search did not return any results, Please use the format COURSENAME COURSENUMBER."));
+						toClient.writeObject(new SearchCatalogDataMessage(""));
 					}
 					else
 					{
