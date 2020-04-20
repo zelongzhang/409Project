@@ -1,11 +1,18 @@
+
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
 
 import message.*;
 import java.util.*;
@@ -42,6 +49,63 @@ public class ClientRegistrationThread implements Runnable {
 
 	// ************************************* ACTION LISTENERS ************************************************
 
+	private void createTextAreaListener()
+	{
+		
+		mf.getRecords().addMouseListener(new MouseAdapter() {
+	        @Override
+	        public void mousePressed(MouseEvent evt) {
+	           tAreaMousePressed(evt);
+	        }
+	     });
+		
+		
+	}
+	
+	
+
+	
+	   private void tAreaMousePressed(MouseEvent evt) {
+		      try {
+		         int offset = mf.getRecords().viewToModel(evt.getPoint());
+		         Rectangle rect = mf.getRecords().modelToView(offset);
+		         
+		 
+		         int startRow = mf.getRecords().viewToModel(new Point(0, rect.y));
+		         int endRow = mf.getRecords().viewToModel(new Point(mf.getRecords().getWidth(), rect.y));
+		         
+		         String selectedCourseString = mf.getRecords().getText(startRow, endRow-startRow);
+		          
+		         //System.out.printf("Selected Offsets: [%d, %d]%n", startRow, endRow);
+		         //System.out.println(	mf.getRecords().getText(startRow, endRow-startRow)	);
+		         
+		         String courseName = selectedCourseString.substring(0, 4);
+		         System.out.println("Course Name= "+ courseName);
+		         
+		         String courseNumber = selectedCourseString.substring(4, 7);
+		         System.out.println("Course Number= "+ courseNumber);
+		         
+		         String[] StringsOfCourseSections = selectedCourseString.split(Pattern.quote("["));  // ignore 1st string and also add "[" character to every other string
+		        
+		         //for(String i : StringsOfCourseSections) System.out.println(i);
+		        	 
+		         CourseSectionFrame sectionFrame = new CourseSectionFrame(StringsOfCourseSections);
+		         
+		         
+		          
+		         mf.getRecords().select(startRow, endRow);
+		      } catch (BadLocationException e) {
+		         e.printStackTrace();
+		      }
+		   }
+	
+	
+	
+	
+	
+	
+	
+	
 	private void createMainFrameExitListener()
 	{
 		mf.getExit().addActionListener( (ActionEvent e) -> {
@@ -49,7 +113,6 @@ public class ClientRegistrationThread implements Runnable {
 			mf.dispose();
 		});
 	}
-	
 	
 	private void createSearchCatalogueListener() {
 
@@ -386,6 +449,7 @@ public class ClientRegistrationThread implements Runnable {
 		createAddCourseListener();
 		createRemoveCourseListener();
 		createMainFrameExitListener();
+		createTextAreaListener();
 	}
 
 }
