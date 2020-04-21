@@ -2,7 +2,9 @@ package message;
 
 /**
  * Implementation of a add registration request from the client to the server.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since Apr 20, 2020
  */

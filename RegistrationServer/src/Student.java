@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 /**
  * Implementation of a Student using the registration application.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since Apr 20, 2020
  */

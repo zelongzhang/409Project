@@ -2,7 +2,9 @@ package message;
 
 /**
  * Implementation of a pass/fail response sent from the server to the client in response to a client request such as add registration.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since Apr 20, 2020
  *

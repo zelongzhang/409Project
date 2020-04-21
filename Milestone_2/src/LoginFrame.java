@@ -5,8 +5,9 @@ import javax.swing.*;
  *
  * This class represents and helps create a login frame
  * 
- * @author MaazKhurram
- * @version 1.0
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @since 20th April
  *
  */

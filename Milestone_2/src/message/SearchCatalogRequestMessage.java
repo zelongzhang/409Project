@@ -2,7 +2,9 @@ package message;
 
 /**
  * Implementation of a search catalog query sent from client to server.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since Apr 20, 2020
  *

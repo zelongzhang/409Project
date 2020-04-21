@@ -17,7 +17,9 @@ import message.ViewStudentCoursesDataMessage;
 /**
  * Implementation of a handler for a single client
  * This thread handles all communications and requests from the client.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since Apr 20, 2020
  */

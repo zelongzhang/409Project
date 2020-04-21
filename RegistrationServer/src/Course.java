@@ -2,7 +2,9 @@ import java.util.ArrayList;
 
 /**
  * Implementation of a University Course for the purporse of a registration application.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since April 20, 2020
  */

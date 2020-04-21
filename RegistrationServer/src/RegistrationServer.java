@@ -8,7 +8,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * Implementation of a server for the registration application
  * Handles all client connections and constructs the initial data model.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since Apr 20, 2020
  */

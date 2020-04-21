@@ -8,7 +8,9 @@ import java.net.UnknownHostException;
 /**
 *
 *Represents the client and is responsible for handling the connection with the server
-* @author MaazKhurram
+* @author Maaz Khurram
+* @author Kevin Zhang
+* @author Saksham Nanda
 * @version 1.0
 * @since 20th April
 *

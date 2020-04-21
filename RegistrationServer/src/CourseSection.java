@@ -2,7 +2,9 @@ import java.util.ArrayList;
 
 /**
  * Implementation of a course section which belongs to a course for the implementation of a registration system.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since Apr 20, 2020
  */

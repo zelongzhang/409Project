@@ -8,7 +8,9 @@ import java.util.ArrayList;
 /**
  * Implementation of a database manager for the registration application, 
  * it handles all the reads and write to the database and keeps the database in sync with the server objects.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since apr 20, 2020
  */

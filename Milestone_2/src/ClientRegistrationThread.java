@@ -24,7 +24,9 @@ import java.util.*;
  * Provides all fields and methods to run the client thread and contains most of
  * the logic of the client
  *
- * @author MaazKhurram
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since 20th April
  *

@@ -6,7 +6,9 @@ import java.util.Map;
  * Implementation of a message passed between the server and client
  * In its simplest form, it is essentially a string
  * However, classes may extend off Message to include different types of data and methods.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since Apr 20, 2020
  */

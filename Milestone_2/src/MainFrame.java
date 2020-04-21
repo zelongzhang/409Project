@@ -7,7 +7,9 @@ import javax.swing.*;
  *
  * This class represents and helps create a main frame of the application
  * 
- * @author MaazKhurram
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since 20th April
  *

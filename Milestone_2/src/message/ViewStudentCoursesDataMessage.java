@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 /**
  * Implementation of sending a student's course list from the server to the client.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since Apr 20, 2020
  *

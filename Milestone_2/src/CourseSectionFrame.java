@@ -11,7 +11,9 @@ import javax.swing.text.BadLocationException;
 /**
 *	Represents a frame that asks user for Course Section number
 *
-* @author MaazKhurram
+* @author Maaz Khurram
+* @author Kevin Zhang
+* @author Saksham Nanda
 * @version 1.0
 * @since 20th April
 *

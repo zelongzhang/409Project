@@ -2,7 +2,9 @@ import java.util.ArrayList;
 
 /**
  * Implementation of a course catalog, a collection of courses for the purposes of a registration application.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since Apr 20, 2020
  */

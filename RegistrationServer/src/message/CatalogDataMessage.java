@@ -3,7 +3,9 @@ package message;
 import java.util.ArrayList;
 /**
  * Implementation of a full catalog data message from the server to the client.
- * @author Kevin
+ * @author Maaz Khurram
+ * @author Kevin Zhang
+ * @author Saksham Nanda
  * @version 1.0
  * @since Apr 20, 2020
  *
