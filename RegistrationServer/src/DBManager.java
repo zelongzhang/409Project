@@ -9,7 +9,8 @@ import java.util.ArrayList;
  * Implementation of a database manager for the registration application, 
  * it handles all the reads and write to the database and keeps the database in sync with the server objects.
  * @author Kevin
- * @
+ * @version 1.0
+ * @since apr 20, 2020
  */
 public class DBManager 
 {
@@ -17,6 +18,9 @@ public class DBManager
 	private CourseCatalog courseCatalog;
 	private ArrayList<User> userList;
 	
+	/**
+	 * Default constructor, establishes connection to MySQL dabatase.
+	 */
 	public DBManager()
 	{
 		this.courseCatalog = new CourseCatalog();
@@ -30,6 +34,8 @@ public class DBManager
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
 	public String toString()
 	{
 		String s = this.courseCatalog.toString()+"\n";
@@ -40,6 +46,9 @@ public class DBManager
 		return s;
 	}
 	
+	/**
+	 * updates the courses catalog by reading data from the courses table in the database.
+	 */
 	public void updateCatalog()
 	{
 		readCourses();
@@ -47,12 +56,18 @@ public class DBManager
 		System.out.println("finished updating catalog");
 	}
 	
+	/**
+	 * updates the users list by reading data from the users table in the database.
+	 */
 	public void updateUsers()
 	{
 		readStudents();
 		System.out.println("finished updating users");
 	}
 	
+	/**
+	 * updates the registrations of students and the sections by reading from the users and sections table in the database.
+	 */
 	public void updateRegistrations() 
 	{
 		readRegistrations();
@@ -60,7 +75,11 @@ public class DBManager
 	}
 
 	
-	public void addRegistrationToDB(Registration registration)
+	/**
+	 * Adds a registration to the database, adds a section to the student's registration field, and a student to the section's registration field.
+	 * @param registration The registration to be added.
+	 */
+	public synchronized void addRegistrationToDB(Registration registration)
 	{
 		Student student = registration.getStudent();
 		CourseSection section = registration.getCourseSection();
@@ -69,7 +88,15 @@ public class DBManager
 			Statement lookForStudent = this.dbConnection.createStatement();
 			ResultSet studentRow = lookForStudent.executeQuery("SELECT * FROM users WHERE ID = "+student.getUserID());
 			studentRow.next();
-			String newRegistrationString = studentRow.getString("registrations")+","+section.getCourse().getCourseID()+" "+section.getSectionNum();
+			String newRegistrationString = studentRow.getString("registrations");
+			if(newRegistrationString==null || newRegistrationString.isEmpty() || newRegistrationString.isBlank())
+			{
+				newRegistrationString = section.getCourse().getCourseID()+" "+section.getSectionNum();
+			}
+			else
+			{
+				newRegistrationString+=","+section.getCourse().getCourseID()+" "+section.getSectionNum();
+			}
 			String updateStudents = "UPDATE users "
 					+" SET registrations = '"+newRegistrationString+"'"
 					+ "WHERE ID = "+studentRow.getInt("ID");
@@ -82,7 +109,15 @@ public class DBManager
 			Statement lookForSection = this.dbConnection.createStatement();
 			ResultSet sectionRow = lookForSection.executeQuery("SELECT * FROM sections WHERE courseID ="+section.getCourse().getCourseID()+" AND sectionNum = "+section.getSectionNum());
 			sectionRow.next();
-			String newStudentListString = sectionRow.getString("registrations")+","+student.getUsername();
+			String newStudentListString = sectionRow.getString("registrations");
+			if(newStudentListString==null || newStudentListString.isBlank() || newStudentListString.isEmpty())
+			{
+				newStudentListString = student.getUsername();
+			}
+			else
+			{
+				newStudentListString+=","+student.getUsername();
+			}
 			String updateSection = "UPDATE sections "
 					+" SET registrations = '"+newStudentListString+"'"
 					+ "WHERE sectionID = "+sectionRow.getInt("sectionID");
@@ -99,9 +134,75 @@ public class DBManager
 		
 	}
 	
-	public void removeRegistrationFromDB(Registration registration)
+	public synchronized void removeRegistrationFromDB(Registration registration)
 	{
-		//TODO
+		Student student = registration.getStudent();
+		CourseSection section = registration.getCourseSection();
+		try 
+		{
+			Statement lookForStudent = this.dbConnection.createStatement();
+			ResultSet studentRow = lookForStudent.executeQuery("SELECT * FROM users WHERE ID = "+student.getUserID());
+			studentRow.next();
+			String oldRegistrations = studentRow.getString("registrations");
+			if(oldRegistrations !=null)
+			{
+				String oldRegInfo[] = studentRow.getString("registrations").split(",");
+				StringBuilder newRegistrationString = new StringBuilder();
+				
+				for(String reg : oldRegInfo)
+				{
+					if(Integer.parseInt(reg.split(" ")[0]) != registration.getCourseSection().getCourse().getCourseID()
+							|| Integer.parseInt(reg.split(" ")[1]) != registration.getCourseSection().getSectionNum())
+					{
+						newRegistrationString.append(reg+",");
+					}
+				}
+				if(newRegistrationString.length()!=0)
+				{
+					newRegistrationString.deleteCharAt(newRegistrationString.length()-1);
+				}
+				String updateStudents = "UPDATE users "
+						+" SET registrations = '"+newRegistrationString.toString()+"'"
+						+ "WHERE ID = "+studentRow.getInt("ID");
+				Statement updateRegistrationStudent = this.dbConnection.createStatement();
+				updateRegistrationStudent.executeUpdate(updateStudents);
+				studentRow.close();
+				lookForStudent.close();
+				updateRegistrationStudent.close();
+				
+				
+				Statement lookForSection = this.dbConnection.createStatement();
+				ResultSet sectionRow = lookForSection.executeQuery("SELECT * FROM sections WHERE courseID ="+section.getCourse().getCourseID()+" AND sectionNum = "+section.getSectionNum());
+				sectionRow.next();
+				
+				String oldStudentListString = sectionRow.getString("registrations");
+				StringBuilder newStudentListString = new StringBuilder();
+				String oldStudentListInfo[] = oldStudentListString.split(",");
+				for(String name : oldStudentListInfo)
+				{
+					if(!name.equals(registration.getStudent().getUsername()))
+					{
+						newStudentListString.append(name+",");
+					}
+				}
+				if(newStudentListString.length()!=0)
+				{
+					newStudentListString.deleteCharAt(newStudentListString.length()-1);
+				}
+				String updateSection = "UPDATE sections "
+						+" SET registrations = '"+newStudentListString.toString()+"'"
+						+ "WHERE sectionID = "+sectionRow.getInt("sectionID");
+				Statement updateRegistrationSection = this.dbConnection.createStatement();
+				updateRegistrationSection.executeUpdate(updateSection);
+				sectionRow.close();
+				lookForSection.close();
+				updateRegistrationSection.close();
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public void readCourses()
@@ -151,7 +252,6 @@ public class DBManager
 					String prereqs[] = prereqsString.split(",");
 					for(String pre : prereqs)
 					{
-						System.out.println(pre);
 						Course prereqCourse = this.courseCatalog.searchForCourse(pre.split(" ")[0],Integer.parseInt(pre.split(" ")[1]));
 						course.addPrereq(prereqCourse);
 					}
