@@ -1,6 +1,8 @@
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -150,6 +152,8 @@ public class ClientRegistrationThread implements Runnable {
 			         
 		        	 
 				     csf = new CourseSectionFrame(StringsOfCourseSections);
+						Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+						csf.setLocation(dim.width/2-csf.getSize().width/2, dim.height/2-csf.getSize().height/2);
 				     createSectionFrameTextAreaListener();
 				     createSectionFrameListeners();
 				     
@@ -547,6 +551,17 @@ public class ClientRegistrationThread implements Runnable {
 	{
 		mf.getExit().addActionListener( (ActionEvent e) -> {
 			
+			Message QuitRequest = new QuittingMessage();
+			 try
+			 {
+			 this.toServer.writeObject(QuitRequest);
+			 this.toServer.flush();
+			 }
+			 catch (IOException f)
+			 {
+			 f.printStackTrace();
+			 }
+			
 			mf.dispose();
 		});
 	}
@@ -576,12 +591,27 @@ public class ClientRegistrationThread implements Runnable {
 
 	private void createLoginExitListener() {
 		lf.getExit().addActionListener((ActionEvent e) -> {
+			
+			Message QuitRequest = new QuittingMessage();
+			 try
+			 {
+			 this.toServer.writeObject(QuitRequest);
+			 this.toServer.flush();
+			 }
+			 catch (IOException f)
+			 {
+			 f.printStackTrace();
+			 }
+			
+			 
 			lf.dispose();
 		});
 	}
 
 	private void createMainFrameAndListeners() {
 		this.mf = new MainFrame("Schedule Builder");
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		mf.setLocation(dim.width/2-mf.getSize().width/2, dim.height/2-mf.getSize().height/2);
 		mf.setSize(1000, 563);
 		mf.setVisible(true);
 		createViewCourseCatalogueListener();

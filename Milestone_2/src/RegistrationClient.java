@@ -1,3 +1,5 @@
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -16,6 +18,8 @@ public class RegistrationClient
 			clientSocket = new Socket(InetAddress.getByName("localhost"), 8008); //70.65.104.103 
 			
 			lf = new LoginFrame("Login");
+			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			lf.setLocation(dim.width/2-lf.getSize().width/2, dim.height/2-lf.getSize().height/2);
 			lf.setSize(500, 250);
 		} 
 		catch (UnknownHostException e) 
