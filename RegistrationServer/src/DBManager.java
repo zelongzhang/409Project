@@ -312,7 +312,7 @@ public class DBManager
 			{
 				Student newStudent = new Student(students.getString("username"),students.getString("password"),students.getInt("ID"));
 				String prevCourses = students.getString("pastCourses");
-				if(prevCourses!=null)
+				if(prevCourses!=null && !prevCourses.isEmpty())
 				{
 					for(String courseID : prevCourses.split(","))
 					{
@@ -364,7 +364,7 @@ public class DBManager
 			{
 				Student student = findStudent(students.getString("username"));
 				String registeredCourses = students.getString("registrations");
-				if(registeredCourses!=null)
+				if(registeredCourses!=null && !registeredCourses.isEmpty())
 				{
 					for(String courseInfo : registeredCourses.split(","))
 					{
