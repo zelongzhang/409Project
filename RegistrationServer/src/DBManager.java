@@ -89,7 +89,7 @@ public class DBManager
 			ResultSet studentRow = lookForStudent.executeQuery("SELECT * FROM users WHERE ID = "+student.getUserID());
 			studentRow.next();
 			String newRegistrationString = studentRow.getString("registrations");
-			if(newRegistrationString==null || newRegistrationString.isEmpty() || newRegistrationString.isBlank())
+			if(newRegistrationString==null || newRegistrationString.isEmpty() )
 			{
 				newRegistrationString = section.getCourse().getCourseID()+" "+section.getSectionNum();
 			}
@@ -110,7 +110,7 @@ public class DBManager
 			ResultSet sectionRow = lookForSection.executeQuery("SELECT * FROM sections WHERE courseID ="+section.getCourse().getCourseID()+" AND sectionNum = "+section.getSectionNum());
 			sectionRow.next();
 			String newStudentListString = sectionRow.getString("registrations");
-			if(newStudentListString==null || newStudentListString.isBlank() || newStudentListString.isEmpty())
+			if(newStudentListString==null || newStudentListString.isEmpty())
 			{
 				newStudentListString = student.getUsername();
 			}

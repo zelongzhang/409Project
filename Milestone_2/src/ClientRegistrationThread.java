@@ -186,11 +186,21 @@ public class ClientRegistrationThread implements Runnable {
 				}
 				//else if (mf.getRecords().getMouseListeners().length != 0 ){}
 				
-				targetOperation = 1;
 				
-				if (mf.getRecords().getText().trim().length() == 0) ViewAllCatalogueCourses();
-				JOptionPane.showMessageDialog(null,"Please choose the course you want to take from the main window.");  
-				createTextAreaListener();
+				if (targetOperation == 1){
+					ViewAllCatalogueCourses();
+					JOptionPane.showMessageDialog(null,"Please choose the course you want to take from the main window.");  
+				}
+				else{
+
+					targetOperation = 1;
+					
+//					if (mf.getRecords().getText().trim().length() == 0) 
+					ViewAllCatalogueCourses();
+					JOptionPane.showMessageDialog(null,"Please choose the course you want to take from the main window.");  
+					createTextAreaListener();
+
+				}
 
 			});
 		
@@ -293,10 +303,18 @@ public class ClientRegistrationThread implements Runnable {
 					mf.getRecords().removeMouseListener(ml);
 				}
 				
-				targetOperation = 2;
-				ViewStudentCourses();
-				JOptionPane.showMessageDialog(null,"Please choose the course you want to remove from the main window.");  
-				createTextAreaListener();
+				if (targetOperation == 2){
+					ViewStudentCourses();
+					JOptionPane.showMessageDialog(null,"Please choose the course you want to remove from the main window.");  
+				}
+				else{
+					targetOperation = 2;
+					ViewStudentCourses();
+					JOptionPane.showMessageDialog(null,"Please choose the course you want to remove from the main window.");  
+					createTextAreaListener();
+				}
+				
+
 	
 	
 			});
@@ -455,8 +473,20 @@ public class ClientRegistrationThread implements Runnable {
 						System.out.println(mf.getRecords().getMouseListeners().length);
 						if ((targetOperation == 2) || (targetOperation == -1))
 							{
+								System.out.println("Adding a add course listener due to search course functionality");
 								
-								createAddCourseListener();
+								if (targetOperation == 2)
+								{
+									mf.getRecords().removeMouseListener(ml);
+								}
+								//else if (mf.getRecords().getMouseListeners().length != 0 ){}
+								
+								targetOperation = 1;
+								
+								
+								JOptionPane.showMessageDialog(null,"ADDING THE SEARCHED COURSE");  
+								createTextAreaListener();
+								
 							}
 	
 						
