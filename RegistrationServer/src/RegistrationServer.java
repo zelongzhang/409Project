@@ -40,14 +40,14 @@ public class RegistrationServer
 			System.out.print(c.getCourseName()+c.getCourseNum()+" ");
 		}
 		System.out.println();
-		for(Registration reg: ((Student)this.dbManager.getUserList().get(0)).getRegList())
-		{
-			System.out.println(reg);
-		}
-		for(String s: this.dbManager.getCourseCatalog().toSendFormat())
-		{
-			System.out.println(s);
-		}
+//		for(Registration reg: ((Student)this.dbManager.getUserList().get(0)).getRegList())
+//		{
+//			System.out.println(reg);
+//		}
+//		for(String s: this.dbManager.getCourseCatalog().toSendFormat())
+//		{
+//			System.out.println(s);
+//		}
 		
 		while(!end)
 		{
