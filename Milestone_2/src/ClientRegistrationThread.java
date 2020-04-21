@@ -1,6 +1,8 @@
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -150,6 +152,8 @@ public class ClientRegistrationThread implements Runnable {
 			         
 		        	 
 				     csf = new CourseSectionFrame(StringsOfCourseSections);
+						Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+						csf.setLocation(dim.width/2-csf.getSize().width/2, dim.height/2-csf.getSize().height/2);
 				     createSectionFrameTextAreaListener();
 				     createSectionFrameListeners();
 				     
@@ -184,11 +188,23 @@ public class ClientRegistrationThread implements Runnable {
 				{
 					mf.getRecords().removeMouseListener(ml);
 				}
+				//else if (mf.getRecords().getMouseListeners().length != 0 ){}
 				
-				targetOperation = 1;
-				ViewAllCatalogueCourses();
-				JOptionPane.showMessageDialog(null,"Please choose the course you want to take from the main window.");  
-				createTextAreaListener();
+				
+				if (targetOperation == 1){
+					ViewAllCatalogueCourses();
+					JOptionPane.showMessageDialog(null,"Please choose the course you want to take from the main window.");  
+				}
+				else{
+
+					targetOperation = 1;
+					
+//					if (mf.getRecords().getText().trim().length() == 0) 
+					ViewAllCatalogueCourses();
+					JOptionPane.showMessageDialog(null,"Please choose the course you want to take from the main window.");  
+					createTextAreaListener();
+
+				}
 
 			});
 		
@@ -260,7 +276,7 @@ public class ClientRegistrationThread implements Runnable {
 					String[] contents = i.split(",");
 					str = contents[0] + contents[1] + ": ";
 					System.out.println(str);
-					if (contents.length % 2 == 0) {
+					if ((contents.length-2)%3 == 0) {
 						for (int k = 2; k < contents.length; k++) {
 							str += "[Section: " + contents[k] + " ("+contents[++k] +"/" + contents[++k] + ")] ";
 						}
@@ -291,10 +307,18 @@ public class ClientRegistrationThread implements Runnable {
 					mf.getRecords().removeMouseListener(ml);
 				}
 				
-				targetOperation = 2;
-				ViewStudentCourses();
-				JOptionPane.showMessageDialog(null,"Please choose the course you want to remove from the main window.");  
-				createTextAreaListener();
+				if (targetOperation == 2){
+					ViewStudentCourses();
+					JOptionPane.showMessageDialog(null,"Please choose the course you want to remove from the main window.");  
+				}
+				else{
+					targetOperation = 2;
+					ViewStudentCourses();
+					JOptionPane.showMessageDialog(null,"Please choose the course you want to remove from the main window.");  
+					createTextAreaListener();
+				}
+				
+
 	
 	
 			});
@@ -344,9 +368,6 @@ public class ClientRegistrationThread implements Runnable {
 		mf.getViewStudentCourses().addActionListener((ActionEvent e) -> {
 	
 			ViewStudentCourses();
-			
-			
-	
 		});
 	
 	}
@@ -361,8 +382,7 @@ public class ClientRegistrationThread implements Runnable {
 		try {
 			this.toServer.writeObject(ViewStudentCoursesRequest);
 			this.toServer.flush();
-			ViewStudentCoursesDataMessage ViewStudentCoursesData = (ViewStudentCoursesDataMessage) this.fromServer
-					.readObject();
+			ViewStudentCoursesDataMessage ViewStudentCoursesData = (ViewStudentCoursesDataMessage) this.fromServer.readObject();
 			ArrayList<String> data = ViewStudentCoursesData.getCourseList();
 			// System.out.println(data);
 	
@@ -429,31 +449,51 @@ public class ClientRegistrationThread implements Runnable {
 				try {
 					this.toServer.writeObject(searchCatalogueRequest);
 					this.toServer.flush();
-					SearchCatalogDataMessage searchCatalogueData = (SearchCatalogDataMessage) this.fromServer.readObject();
-					ArrayList<String> courses = searchCatalogueData.getSearchResult();
-					// System.out.println(data);
+					SearchCatalogDataMessage searchCatalogueData = (SearchCatalogDataMessage) this.fromServer.readObject();	
+					String courses = searchCatalogueData.getSearchResult();
+					 System.out.println(courses);
 	
-					if (courses.size() == 0) {
+					if (courses.isEmpty()) {
 						mf.showError("Course does not exist!");
 					} else {
 	
-						for (String i : courses) {
-							// System.out.println(i);
-							String str = new String();
-							String[] contents = i.split(",");
-							str = contents[0] + contents[1] + ": ";
-							System.out.println(str);
-							if (contents.length % 2 == 0) {
-								for (int k = 2; k < contents.length; k++) {
-									str += "[Section: " + contents[k] + " ("+contents[++k] +"/" + contents[++k] + ")] ";
+
+						String str = new String();
+						String[] contents = courses.split(",");
+						str = contents[0] + contents[1] + ": ";
+						System.out.println(str);
+						if ((contents.length-2) % 3 == 0) {
+							for (int k = 2; k < contents.length; k++) {
+								str += "[Section: " + contents[k] + " (" + contents[++k] + "/" + contents[++k] + ")] ";
+							}
+						} else
+							System.err.println("Wrong size of message****");
+
+						str += "\n";
+						mf.getRecords().setText(null);
+						mf.getRecords().append(str);
+						
+						System.out.println("targetOperation =" + targetOperation);
+						System.out.println(mf.getRecords().getMouseListeners().length);
+						if ((targetOperation == 2) || (targetOperation == -1))
+							{
+								System.out.println("Adding a add course listener due to search course functionality");
+								
+								if (targetOperation == 2)
+								{
+									mf.getRecords().removeMouseListener(ml);
 								}
-							} else
-								System.err.println("Wrong size of message****");
+								//else if (mf.getRecords().getMouseListeners().length != 0 ){}
+								
+								targetOperation = 1;
+								
+								
+								JOptionPane.showMessageDialog(null,"ADDING THE SEARCHED COURSE");  
+								createTextAreaListener();
+								
+							}
 	
-							str += "\n";
-							mf.getRecords().append(str);
-	
-						}
+						
 	
 					}
 	
@@ -511,6 +551,17 @@ public class ClientRegistrationThread implements Runnable {
 	{
 		mf.getExit().addActionListener( (ActionEvent e) -> {
 			
+			Message QuitRequest = new QuittingMessage();
+			 try
+			 {
+			 this.toServer.writeObject(QuitRequest);
+			 this.toServer.flush();
+			 }
+			 catch (IOException f)
+			 {
+			 f.printStackTrace();
+			 }
+			
 			mf.dispose();
 		});
 	}
@@ -540,12 +591,27 @@ public class ClientRegistrationThread implements Runnable {
 
 	private void createLoginExitListener() {
 		lf.getExit().addActionListener((ActionEvent e) -> {
+			
+			Message QuitRequest = new QuittingMessage();
+			 try
+			 {
+			 this.toServer.writeObject(QuitRequest);
+			 this.toServer.flush();
+			 }
+			 catch (IOException f)
+			 {
+			 f.printStackTrace();
+			 }
+			
+			 
 			lf.dispose();
 		});
 	}
 
 	private void createMainFrameAndListeners() {
 		this.mf = new MainFrame("Schedule Builder");
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		mf.setLocation(dim.width/2-mf.getSize().width/2, dim.height/2-mf.getSize().height/2);
 		mf.setSize(1000, 563);
 		mf.setVisible(true);
 		createViewCourseCatalogueListener();

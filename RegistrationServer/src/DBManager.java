@@ -92,6 +92,7 @@ public class DBManager
 			studentRow.next();
 			//Update the registration field of the student with the new course section information
 			String newRegistrationString = studentRow.getString("registrations");
+
 			if(newRegistrationString==null || newRegistrationString.isEmpty())
 			{
 				newRegistrationString = section.getCourse().getCourseID()+" "+section.getSectionNum();

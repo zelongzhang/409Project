@@ -9,9 +9,8 @@ package message;
  */
 public class QuittingMessage extends Message
 {
-
-
 	private static final long serialVersionUID = 11L;
+
 	/**
 	 * No additional data is needed for a quit message.
 	 * @param instruction
