@@ -5,6 +5,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Implementation of a server for the registration application
+ * Handles all client connections and constructs the initial data model.
+ * @author Kevin
+ * @version 1.0
+ * @since Apr 20, 2020
+ */
 public class RegistrationServer 
 {
 	private ServerSocket serverSocket;
@@ -13,7 +20,9 @@ public class RegistrationServer
 	private int maxClients = 100;
 	boolean end = false;
 	
-	
+	/**
+	 * Constructor for the server, opens a server socket, establishes a thread pool for future clients and establishes the connection to the database.
+	 */
 	public RegistrationServer()
 	{
 		try 
@@ -28,6 +37,12 @@ public class RegistrationServer
 			return;
 		}
 	}
+	
+	/**
+	 * Starts the server functionality, builds the initial data model of course catalog and begins to accept client connections.
+	 * @throws InterruptedException if thread is interrupted, abandon it without exiting
+	 * @throws SocketException if socket disconnects, abandon it without exiting
+	 */
 	protected void start() throws InterruptedException, SocketException
 	{
 		System.out.println("Registration server starting...");
@@ -35,20 +50,7 @@ public class RegistrationServer
 		this.dbManager.updateUsers();
 		this.dbManager.updateRegistrations();
 		System.out.println(this.dbManager);
-		for(Course c: ((Student)this.dbManager.getUserList().get(0)).getPastCourses())
-		{
-			System.out.print(c.getCourseName()+c.getCourseNum()+" ");
-		}
-		System.out.println();
-//		for(Registration reg: ((Student)this.dbManager.getUserList().get(0)).getRegList())
-//		{
-//			System.out.println(reg);
-//		}
-//		for(String s: this.dbManager.getCourseCatalog().toSendFormat())
-//		{
-//			System.out.println(s);
-//		}
-		
+		System.out.println("\nServer is ready... waiting for Client Connections...");
 		while(!end)
 		{
 			try 
@@ -65,7 +67,12 @@ public class RegistrationServer
 		this.clientThreadPool.awaitTermination(5, TimeUnit.SECONDS);
 	}
 	
-	
+	/**
+	 * Main class of the server package
+	 * @param args no arguments needed
+	 * @throws InterruptedException
+	 * @throws SocketException
+	 */
 	public static void main(String[] args) throws InterruptedException, SocketException
 	{
 		RegistrationServer regServer = new RegistrationServer();

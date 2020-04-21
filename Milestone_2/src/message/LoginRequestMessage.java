@@ -1,11 +1,22 @@
 package message;
-
+/**
+ * Implementation of a log in request from the client to the server.
+ * @author Kevin
+ * @version 1.0
+ * @since Apr 20, 2020
+ *
+ */
 public class LoginRequestMessage extends Message {
 
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private String password;
 	
+	/**
+	 * To request for a log in, the client must provide the user name and password the user has entered.
+	 * @param username the user name entered by the user.
+	 * @param password the password entered by the user.
+	 */
 	public LoginRequestMessage(String username, String password) {
 		super("LoginRequest");
 		this.username = username;

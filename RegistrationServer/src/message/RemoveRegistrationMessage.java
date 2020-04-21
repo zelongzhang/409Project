@@ -1,5 +1,12 @@
 package message;
 
+/**
+ * Implementation of a remove registrtion request from the client to the server.
+ * @author Kevin
+ * @version 1.0
+ * @since Apr 20, 2020
+ *
+ */
 public class RemoveRegistrationMessage extends Message
 {
 
@@ -8,6 +15,12 @@ public class RemoveRegistrationMessage extends Message
 	private int courseNum;
 	private int sectionNum;
 	
+	/**
+	 * To request removal of a course, the client must provide the course name, course number and section number of the course section to be removed.
+	 * @param coursename the name of the course to be removed.
+	 * @param coursenum the number of the course to be removed.
+ 	 * @param sectionnum the number of the section to be removed.
+	 */
 	public RemoveRegistrationMessage(String coursename, int coursenum, int sectionnum) 
 	{
 		super("RemoveRegistrationRequest");

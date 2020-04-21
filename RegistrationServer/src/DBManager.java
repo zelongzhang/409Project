@@ -76,20 +76,23 @@ public class DBManager
 
 	
 	/**
-	 * Adds a registration to the database, adds a section to the student's registration field, and a student to the section's registration field.
+	 * Adds a registration to the database, adds a section to the registration field in the users table, and adds student's name to the registration field in the sections table.
 	 * @param registration The registration to be added.
 	 */
 	public synchronized void addRegistrationToDB(Registration registration)
 	{
+		
 		Student student = registration.getStudent();
 		CourseSection section = registration.getCourseSection();
 		try 
 		{
+			//Make a query to find the correct student
 			Statement lookForStudent = this.dbConnection.createStatement();
 			ResultSet studentRow = lookForStudent.executeQuery("SELECT * FROM users WHERE ID = "+student.getUserID());
 			studentRow.next();
+			//Update the registration field of the student with the new course section information
 			String newRegistrationString = studentRow.getString("registrations");
-			if(newRegistrationString==null || newRegistrationString.isEmpty() || newRegistrationString.isBlank())
+			if(newRegistrationString==null || newRegistrationString.isEmpty())
 			{
 				newRegistrationString = section.getCourse().getCourseID()+" "+section.getSectionNum();
 			}
@@ -106,11 +109,13 @@ public class DBManager
 			lookForStudent.close();
 			updateRegistrationStudent.close();
 			
+			//Make a query to find the correct course section.
 			Statement lookForSection = this.dbConnection.createStatement();
 			ResultSet sectionRow = lookForSection.executeQuery("SELECT * FROM sections WHERE courseID ="+section.getCourse().getCourseID()+" AND sectionNum = "+section.getSectionNum());
 			sectionRow.next();
+			//Update the registration field of the section with the new student information
 			String newStudentListString = sectionRow.getString("registrations");
-			if(newStudentListString==null || newStudentListString.isBlank() || newStudentListString.isEmpty())
+			if(newStudentListString==null || newStudentListString.isEmpty())
 			{
 				newStudentListString = student.getUsername();
 			}
@@ -134,15 +139,23 @@ public class DBManager
 		
 	}
 	
+	/**
+	 * Removes a registration from the database
+	 * Removes the course section from the registration field in the users table if it exists
+	 * Removes the student's name from the registration field in the sections table if it exists.
+	 * @param registration the registration to be removed.
+	 */
 	public synchronized void removeRegistrationFromDB(Registration registration)
 	{
 		Student student = registration.getStudent();
 		CourseSection section = registration.getCourseSection();
 		try 
 		{
+			//Make a query to find the correct student.
 			Statement lookForStudent = this.dbConnection.createStatement();
 			ResultSet studentRow = lookForStudent.executeQuery("SELECT * FROM users WHERE ID = "+student.getUserID());
 			studentRow.next();
+			//Update the registration field of the student removing the course section information
 			String oldRegistrations = studentRow.getString("registrations");
 			if(oldRegistrations !=null)
 			{
@@ -171,10 +184,11 @@ public class DBManager
 				updateRegistrationStudent.close();
 				
 				
+				//Make a query to find the correct section
 				Statement lookForSection = this.dbConnection.createStatement();
 				ResultSet sectionRow = lookForSection.executeQuery("SELECT * FROM sections WHERE courseID ="+section.getCourse().getCourseID()+" AND sectionNum = "+section.getSectionNum());
 				sectionRow.next();
-				
+				//Update the registration for the section removing the student information
 				String oldStudentListString = sectionRow.getString("registrations");
 				StringBuilder newStudentListString = new StringBuilder();
 				String oldStudentListInfo[] = oldStudentListString.split(",");
@@ -205,13 +219,19 @@ public class DBManager
 		}
 	}
 
+	/**
+	 * Reads the database for course information to construct courses for the course catalog
+	 * Populates course catalog's course list with courses and course sections.
+	 */
 	public void readCourses()
 	{
 		this.courseCatalog = new CourseCatalog();
 		try 
 		{
+			//Query every row in the courses table
 			Statement courseStm = this.dbConnection.createStatement();
 			ResultSet courses = courseStm.executeQuery("select * from courses");
+			//for every row, make a new course and populate it with the correct sections
 			while(courses.next())
 			{
 				Course newCourse = new Course(courses.getString("coursename"),courses.getInt("courseNum"),courses.getInt("courseID"));
@@ -237,12 +257,20 @@ public class DBManager
 		}
 		
 	}
+	
+	/**
+	 * Reads the database for the prerequisite courses for each of the courses
+	 * Populates each course's prerequisite list in the course catalog
+	 * This is a separate method from readCourses because the courses needs to be created before they can be used as prerequisites.
+	 */
 	public void readPrereqs()
 	{
 		try 
 		{
+			//Query every row in the course
 			Statement courseStm = this.dbConnection.createStatement();
 			ResultSet courses = courseStm.executeQuery("select * from courses");
+			//Populate each course with its corresponding prerequisites
 			while(courses.next())
 			{
 				Course course = this.courseCatalog.searchForCourse(courses.getInt("courseID"));
@@ -266,13 +294,19 @@ public class DBManager
 		}
 	}
 	
+	/**
+	 * Reads the database for Student information
+	 * Populates the student list.
+	 */
 	public void readStudents()
 	{
 		this.userList = new ArrayList<User>();
 		try 
 		{
+			//Query every row in users table
 			Statement studentStm = this.dbConnection.createStatement();
 			ResultSet students = studentStm.executeQuery("select * from users");
+			//Create a new student for each row and add to student list
 			while(students.next())
 			{
 				Student newStudent = new Student(students.getString("username"),students.getString("password"),students.getInt("ID"));
@@ -294,6 +328,12 @@ public class DBManager
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Searches for a student by their name in the list of students.
+	 * @param name the name of the student
+	 * @return the student with the corresponding name if they are in the student list.
+	 */
 	public Student findStudent(String name)
 	{
 		for(User u :this.userList)
@@ -306,12 +346,19 @@ public class DBManager
 		}
 		return null;
 	}
+	
+	/**
+	 * Reads the database for all course registration information
+	 * Populates each student and each course section's registration lists.
+	 */
 	public void readRegistrations()
 	{
 		try 
 		{
+			//Query every row/student in the users table
 			Statement studentStm = this.dbConnection.createStatement();
 			ResultSet students = studentStm.executeQuery("select * from users");
+			//Using the registration field, make registrations for every student and add them to the students and the sections
 			while(students.next())
 			{
 				Student student = findStudent(students.getString("username"));
