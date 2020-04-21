@@ -13,7 +13,7 @@ public class RegistrationClient
 	{
 		try 
 		{
-			clientSocket = new Socket(InetAddress.getByName("localhost"), 8008);
+			clientSocket = new Socket(InetAddress.getByName("localhost"), 8008); //70.65.104.103 
 			
 			lf = new LoginFrame("Login");
 			lf.setSize(500, 250);

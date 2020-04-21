@@ -184,9 +184,11 @@ public class ClientRegistrationThread implements Runnable {
 				{
 					mf.getRecords().removeMouseListener(ml);
 				}
+				//else if (mf.getRecords().getMouseListeners().length != 0 ){}
 				
 				targetOperation = 1;
-				ViewAllCatalogueCourses();
+				
+				if (mf.getRecords().getText().trim().length() == 0) ViewAllCatalogueCourses();
 				JOptionPane.showMessageDialog(null,"Please choose the course you want to take from the main window.");  
 				createTextAreaListener();
 
@@ -260,7 +262,7 @@ public class ClientRegistrationThread implements Runnable {
 					String[] contents = i.split(",");
 					str = contents[0] + contents[1] + ": ";
 					System.out.println(str);
-					if (contents.length % 2 == 0) {
+					if ((contents.length-2)%3 == 0) {
 						for (int k = 2; k < contents.length; k++) {
 							str += "[Section: " + contents[k] + " ("+contents[++k] +"/" + contents[++k] + ")] ";
 						}
@@ -344,9 +346,6 @@ public class ClientRegistrationThread implements Runnable {
 		mf.getViewStudentCourses().addActionListener((ActionEvent e) -> {
 	
 			ViewStudentCourses();
-			
-			
-	
 		});
 	
 	}
@@ -361,8 +360,7 @@ public class ClientRegistrationThread implements Runnable {
 		try {
 			this.toServer.writeObject(ViewStudentCoursesRequest);
 			this.toServer.flush();
-			ViewStudentCoursesDataMessage ViewStudentCoursesData = (ViewStudentCoursesDataMessage) this.fromServer
-					.readObject();
+			ViewStudentCoursesDataMessage ViewStudentCoursesData = (ViewStudentCoursesDataMessage) this.fromServer.readObject();
 			ArrayList<String> data = ViewStudentCoursesData.getCourseList();
 			// System.out.println(data);
 	
@@ -429,31 +427,39 @@ public class ClientRegistrationThread implements Runnable {
 				try {
 					this.toServer.writeObject(searchCatalogueRequest);
 					this.toServer.flush();
-					SearchCatalogDataMessage searchCatalogueData = (SearchCatalogDataMessage) this.fromServer.readObject();
-					ArrayList<String> courses = searchCatalogueData.getSearchResult();
-					// System.out.println(data);
+					SearchCatalogDataMessage searchCatalogueData = (SearchCatalogDataMessage) this.fromServer.readObject();	
+					String courses = searchCatalogueData.getSearchResult();
+					 System.out.println(courses);
 	
-					if (courses.size() == 0) {
+					if (courses.isEmpty()) {
 						mf.showError("Course does not exist!");
 					} else {
 	
-						for (String i : courses) {
-							// System.out.println(i);
-							String str = new String();
-							String[] contents = i.split(",");
-							str = contents[0] + contents[1] + ": ";
-							System.out.println(str);
-							if (contents.length % 2 == 0) {
-								for (int k = 2; k < contents.length; k++) {
-									str += "[Section: " + contents[k] + " ("+contents[++k] +"/" + contents[++k] + ")] ";
-								}
-							} else
-								System.err.println("Wrong size of message****");
+
+						String str = new String();
+						String[] contents = courses.split(",");
+						str = contents[0] + contents[1] + ": ";
+						System.out.println(str);
+						if ((contents.length-2) % 3 == 0) {
+							for (int k = 2; k < contents.length; k++) {
+								str += "[Section: " + contents[k] + " (" + contents[++k] + "/" + contents[++k] + ")] ";
+							}
+						} else
+							System.err.println("Wrong size of message****");
+
+						str += "\n";
+						mf.getRecords().setText(null);
+						mf.getRecords().append(str);
+						
+						System.out.println("targetOperation =" + targetOperation);
+						System.out.println(mf.getRecords().getMouseListeners().length);
+						if ((targetOperation == 2) || (targetOperation == -1))
+							{
+								
+								createAddCourseListener();
+							}
 	
-							str += "\n";
-							mf.getRecords().append(str);
-	
-						}
+						
 	
 					}
 	

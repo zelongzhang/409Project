@@ -42,9 +42,7 @@ public class MainFrame extends JFrame{
 		CenterPanel = new JPanel();
 		records = new JTextArea(100,57);
 		records.setEditable(false);
-		records.append("Maaz- the great\n");
 		records.setText(null);
-		records.append("Saksham is better\n");
 		
 		
 		scroll = new JScrollPane(records, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
