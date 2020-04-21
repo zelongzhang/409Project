@@ -5,12 +5,34 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+*
+*Represents the client and is responsible for handling the connection with the server
+* @author MaazKhurram
+* @version 1.0
+* @since 20th April
+*
+*/
+
+
 public class RegistrationClient 
 {
+	/**
+	 * Handle to communicate with the socket
+	 */
 	private Socket clientSocket;
+	/**
+	 * Handle for main frame
+	 */
 	private MainFrame mf;
+	/**
+	 * handle for login frame
+	 */
 	private LoginFrame lf;
 	
+	/**
+	 * Constructs an object of type RegistrationClient
+	 */
 	public RegistrationClient()
 	{
 		try 
@@ -32,6 +54,9 @@ public class RegistrationClient
 		}
 	}
 	
+	/**
+	 * Starts the client
+	 */
 	public void start()
 	{
 		System.out.println("starting client...");

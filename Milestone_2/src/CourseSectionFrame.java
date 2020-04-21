@@ -8,19 +8,47 @@ import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 
+/**
+*	Represents a frame that asks user for Course Section number
+*
+* @author MaazKhurram
+* @version 1.0
+* @since 20th April
+*
+*/
 
 public class CourseSectionFrame extends JFrame {
 
 	
-	
+	/**
+	 * to enable serialization
+	 */
 	private static final long serialVersionUID = 99L;
+	/**
+	 * text area in centre frame
+	 */
 	private JTextArea sections;
+	/**
+	 * Scroll Pane for text area
+	 */
 	private JScrollPane scroll;
+	/**
+	 * Some buttons for section frame in south panel
+	 */
 	private JButton OK, Exit;
+	/**
+	 * Panels to arrange JComponents
+	 */
 	private JPanel SouthPanel, CenterPanel;
+	/**
+	 * To store sourse section
+	 */
 	private String courseSection;
 
-	
+	/**
+	 * Counstructs an object of CourseSectionFrame with the given array of Strings
+	 * @param StringsOfCourseSections
+	 */
 	public CourseSectionFrame(String[] StringsOfCourseSections)
 	{
 		super("Select Course Section");
@@ -103,10 +131,7 @@ public class CourseSectionFrame extends JFrame {
 
 
 	public String findCourseSection() {
-		
-		
-		
-		
+
 		return null;
 	}
 	
